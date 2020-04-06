@@ -2,6 +2,7 @@
 
 namespace EricPridham\Flow;
 
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class FlowServiceProvider extends ServiceProvider
@@ -14,9 +15,9 @@ class FlowServiceProvider extends ServiceProvider
     public function boot()
     {
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'ericpridham');
-         $this->loadViewsFrom(__DIR__.'/../resources/views', 'ericpridham');
-        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        // $this->loadRoutesFrom(__DIR__.'/routes.php');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'flow');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadRoutes();
 
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
@@ -62,9 +63,9 @@ class FlowServiceProvider extends ServiceProvider
         ], 'flow.config');
 
         // Publishing the views.
-        /*$this->publishes([
-            __DIR__.'/../resources/views' => base_path('resources/views/vendor/ericpridham'),
-        ], 'flow.views');*/
+        $this->publishes([
+            __DIR__.'/../resources/views' => base_path('resources/views/vendor/flow'),
+        ], 'flow.views');
 
         // Publishing assets.
         /*$this->publishes([
@@ -78,5 +79,15 @@ class FlowServiceProvider extends ServiceProvider
 
         // Registering package commands.
         // $this->commands([]);
+    }
+
+    public function loadRoutes()
+    {
+        Route::group([
+            'namespace' => 'EricPridham\Flow\Http\Controllers',
+            'prefix' => config('flow.path')
+        ], function () {
+            $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
+        });
     }
 }
