@@ -9,6 +9,7 @@ class CreateFlowEventsTable extends Migration
     public function up()
     {
         Schema::create('flow_events', function (Blueprint $table){
+            $table->id();
             $table->string('request_id');
             $table->string('event_id');
             $table->string('payload_class');

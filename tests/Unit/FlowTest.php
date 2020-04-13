@@ -29,7 +29,6 @@ class FlowTest extends FeatureTestCase
 
         $payload = new GenericPayload('id', ['data' => 'foo']);
 
-
         $flow = new Flow();
         $flow->record($payload);
 

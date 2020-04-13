@@ -19,6 +19,9 @@ class FlowServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadRoutes();
 
+        $flow = new Flow();
+        $flow->register(config('flow.watchers'));
+
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
             $this->bootForConsole();
@@ -68,9 +71,9 @@ class FlowServiceProvider extends ServiceProvider
         ], 'flow.views');
 
         // Publishing assets.
-        /*$this->publishes([
-            __DIR__.'/../resources/assets' => public_path('vendor/ericpridham'),
-        ], 'flow.views');*/
+        $this->publishes([
+            __DIR__.'/../resources/dist' => public_path('vendor/flow'),
+        ], 'flow.views');
 
         // Publishing the translation files.
         /*$this->publishes([
