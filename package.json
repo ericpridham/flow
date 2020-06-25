@@ -22,6 +22,7 @@
     "vue-template-compiler": "^2.6.11"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "cross-env": "^7.0.2",
     "moment": "^2.24.0",
     "tailwindcss": "^1.2.0",

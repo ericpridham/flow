@@ -8,12 +8,14 @@
             <button type="button" class="btn btn-flow" @click="clearEventsPrompt">Clear</button>
             <button type="button" class="btn btn-flow" @click="saveSnapshot">Save</button>
         </div>
-        <flow-event-viewer :events="events"></flow-event-viewer>
+        <div v-if="loading">Loading ...</div>
+        <flow-event-viewer v-else :events="events"></flow-event-viewer>
     </div>
 </template>
 
 <script>
     import moment from 'moment';
+    import axios from 'axios';
 
     export default {
         name: "FlowLive",
@@ -24,9 +26,15 @@
             return {
                 paused: false,
                 events: [],
+                loading: true
             }
         },
         mounted() {
+            axios.get('/flow/events')
+                .then((response) => {
+                    this.events = response.data;
+                    this.loading = false;
+                });
         },
         methods: {
             clearEventsPrompt() {

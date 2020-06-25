@@ -5,7 +5,7 @@ namespace EricPridham\Flow;
 use EricPridham\Flow\Interfaces\FlowPayload;
 use EricPridham\Flow\Interfaces\FlowWatcher;
 use EricPridham\Flow\Models\FlowEvents;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
 use Ramsey\Uuid\Uuid;
 
 class Flow
@@ -37,8 +37,8 @@ class Flow
         $event->save();
     }
 
-    public function retrieve(): Collection
+    public function retrieve(): Builder
     {
-        return FlowEvents::all();
+        return FlowEvents::orderByDesc('created_at');
     }
 }

@@ -24,4 +24,22 @@ class FlowEvents extends Model
         $this->payload_class = get_class($payload);
         $this->payload_data = $payload->data;
     }
+
+    public function getTypeAttribute()
+    {
+        $parts = explode('\\', $this->payload_class);
+        return $parts[array_key_last($parts)];
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'event_id' => $this->event_id,
+            'request_id' => $this->request_id,
+            'type' => $this->payload->type,
+            'payload' => $this->payload_data,
+            'timestamp' => $this->created_at->format('Y-m-d g:i:s A'),
+        ];
+    }
 }

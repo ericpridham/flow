@@ -14,7 +14,6 @@
         name: "NavTab",
         props: ['text', 'active'],
         mounted() {
-            console.log('fuck');
         },
         methods: {
             activate() {

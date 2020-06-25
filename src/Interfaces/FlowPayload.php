@@ -8,6 +8,7 @@ abstract class FlowPayload
 {
     public $id;
     public $data;
+    public $type = 'unknown';
 
     public function __construct(string $id = null, array $data = null)
     {
