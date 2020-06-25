@@ -1,8 +1,6 @@
 <?php
 
-
 namespace EricPridham\Flow\Watchers;
-
 
 use EricPridham\Flow\Flow;
 use EricPridham\Flow\Payloads\ExceptionPayload;
@@ -21,6 +19,7 @@ class LogWatcher
                 if (self::seenException($exception)) {
                     return;
                 }
+                self::markExceptionSeen($exception);
 
                 $payload = ExceptionPayload::fromException($exception);
             } else {

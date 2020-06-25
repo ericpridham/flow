@@ -19,4 +19,14 @@ class LogPayload extends FlowPayload
             'context' => $event->context,
         ]);
     }
+
+    public function getTitle(): string
+    {
+        return ucfirst($this->data['level']) . ': ' . $this->data['message'];
+    }
+
+    public function getDetails()
+    {
+        return $this->data['context'];
+    }
 }

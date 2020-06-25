@@ -1984,10 +1984,15 @@ __webpack_require__.r(__webpack_exports__);
           responseCode: event.payload.responseCode
         });
       } else if (event.type === 'request') {
-        return this.prettyJson({
-          contents: event.payload.contents,
-          response: event.payload.response
-        });
+        var details = {
+          contents: event.payload.contents
+        };
+
+        if (event.payload.response) {
+          details.response = event.payload.response;
+        }
+
+        return this.prettyJson(details);
       }
 
       return this.prettyJson(event.payload);
@@ -21245,7 +21250,7 @@ var render = function() {
         }
       },
       [
-        _c("span", [_vm._v(_vm._s(_vm.eventTitle(_vm.event)))]),
+        _c("span", [_vm._v(_vm._s(_vm.event.title))]),
         _vm._v(" "),
         _c("span", [_vm._v(_vm._s(_vm.event.timestamp))])
       ]
@@ -21265,11 +21270,7 @@ var render = function() {
         staticClass: "mx-2 my-1 p-2 bg-white text-black",
         attrs: { id: "details-" + _vm.event.event_id }
       },
-      [
-        _c("pre", {
-          domProps: { innerHTML: _vm._s(_vm.eventDetails(_vm.event)) }
-        })
-      ]
+      [_c("pre", { domProps: { innerHTML: _vm._s(_vm.event.details) } })]
     )
   ])
 }
@@ -33914,15 +33915,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!******************************************************!*\
   !*** ./resources/javascript/components/FlowLive.vue ***!
   \******************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _FlowLive_vue_vue_type_template_id_780e47c9_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FlowLive.vue?vue&type=template&id=780e47c9&scoped=true& */ "./resources/javascript/components/FlowLive.vue?vue&type=template&id=780e47c9&scoped=true&");
 /* harmony import */ var _FlowLive_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FlowLive.vue?vue&type=script&lang=js& */ "./resources/javascript/components/FlowLive.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _FlowLive_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _FlowLive_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _FlowLive_vue_vue_type_style_index_0_id_780e47c9_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FlowLive.vue?vue&type=style&index=0&id=780e47c9&scoped=true&lang=css& */ "./resources/javascript/components/FlowLive.vue?vue&type=style&index=0&id=780e47c9&scoped=true&lang=css&");
+/* empty/unused harmony star reexport *//* harmony import */ var _FlowLive_vue_vue_type_style_index_0_id_780e47c9_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FlowLive.vue?vue&type=style&index=0&id=780e47c9&scoped=true&lang=css& */ "./resources/javascript/components/FlowLive.vue?vue&type=style&index=0&id=780e47c9&scoped=true&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -33954,7 +33954,7 @@ component.options.__file = "resources/javascript/components/FlowLive.vue"
 /*!*******************************************************************************!*\
   !*** ./resources/javascript/components/FlowLive.vue?vue&type=script&lang=js& ***!
   \*******************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

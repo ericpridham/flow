@@ -13,11 +13,10 @@ class RequestWatcher implements FlowWatcher
     public function register(Flow $flow): void
     {
         Event::listen(RequestHandled::class, function (RequestHandled $event) use ($flow) {
-            $payload = new RequestPayload(null, [
-                'url' => $event->request->fullUrl(),
-                'method' => $event->request->method(),
-            ]);
-            $flow->record($payload);
+            if ($event->request->is(config('flow.path') . '*')) {
+                return;
+            }
+            $flow->record(RequestPayload::fromRequestHandled($event));
         });
     }
 }

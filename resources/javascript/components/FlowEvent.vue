@@ -1,11 +1,11 @@
 <template>
     <div :class="'event event-' + event.type">
         <div class="event-summary" @click.prevent="showDetails = !showDetails">
-            <span>{{ eventTitle(event) }}</span>
+            <span>{{ event.title }}</span>
             <span>{{ event.timestamp }}</span>
         </div>
         <div :id="'details-' + event.event_id" class="mx-2 my-1 p-2 bg-white text-black" v-show="showDetails">
-            <pre v-html="eventDetails(event)"></pre>
+            <pre v-html="event.details"></pre>
         </div>
     </div>
 </template>
@@ -75,10 +75,11 @@
                         responseCode: event.payload.responseCode
                     });
                 } else if (event.type === 'request') {
-                    return this.prettyJson({
-                        contents: event.payload.contents,
-                        response: event.payload.response,
-                    });
+                    let details = {contents: event.payload.contents};
+                    if (event.payload.response) {
+                        details.response = event.payload.response
+                    }
+                    return this.prettyJson( details );
                 }
                 return this.prettyJson(event.payload);
             },

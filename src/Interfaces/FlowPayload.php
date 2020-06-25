@@ -15,4 +15,14 @@ abstract class FlowPayload
         $this->id = $id ?? Uuid::uuid4()->toString();
         $this->data = $data;
     }
+
+    public function getTitle(): string
+    {
+        return ucfirst($this->type);
+    }
+
+    public function getDetails()
+    {
+        return $this->data;
+    }
 }

@@ -15,6 +15,17 @@ class ExceptionPayload extends FlowPayload
             'code' => $exception->getCode(),
             'file' => $exception->getFile(),
             'line' => $exception->getLine(),
+            'trace' => $exception->getTraceAsString()
         ]);
+    }
+
+    public function getTitle(): string
+    {
+        return 'Exception: ' . $this->data['message'];
+    }
+
+    public function getDetails()
+    {
+        return $this->data['file'] . ':' . $this->data['line'] . "\n\n" . $this->data['trace'];
     }
 }
