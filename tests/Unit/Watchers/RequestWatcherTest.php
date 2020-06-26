@@ -7,6 +7,7 @@ use EricPridham\Flow\Tests\FeatureTestCase;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Mockery;
 
 class RequestWatcherTest extends FeatureTestCase
 {
@@ -19,13 +20,22 @@ class RequestWatcherTest extends FeatureTestCase
         $request->shouldReceive([
             'fullUrl' => 'full-url',
             'method' => 'method',
+            'all' => ['foo' => 'bar'],
+            'is' => false,
         ]);
 
-        event(new RequestHandled($request, \Mockery::spy(Response::class)));
+        $response = Mockery::mock(Response::class);
+        $response->shouldReceive([
+            'getContent' => json_encode(['response' => true])
+        ]);
 
-        $events = (new Flow)->retrieve();
+        event(new RequestHandled($request, $response));
+
+        $events = (new Flow)->retrieve()->get();
         $this->assertCount(1, $events);
         $this->assertEquals('full-url', $events[0]->payload->data['url']);
         $this->assertEquals('method', $events[0]->payload->data['method']);
+        $this->assertEquals(['foo' => 'bar'], $events[0]->payload->data['contents']);
+        $this->assertEquals(['response' => true], $events[0]->payload->data['response']);
     }
 }

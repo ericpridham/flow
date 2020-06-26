@@ -32,7 +32,7 @@ class FlowTest extends FeatureTestCase
         $flow = new Flow();
         $flow->record($payload);
 
-        $events = $flow->retrieve();
+        $events = $flow->retrieve()->get();
         $this->assertCount(1, $events);
 
         $event = $events->first();

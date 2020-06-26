@@ -29,14 +29,8 @@
                     return 'Stripe Webhook: ' + event.payload.type;
                 } else if (event.type === 'stripeHttp') {
                     return 'Stripe HTTP: ' + event.payload.method.toUpperCase() + ' ' + event.payload.url;
-                } else if (event.type === 'exception') {
-                    return this.ucfirst(event.type) + ': ' + event.payload.message;
-                } else if (event.type === 'log') {
-                    return this.ucfirst(event.payload.level) + ': ' + event.payload.message;
                 } else if (event.type === 'lcms') {
                     return 'LCMS: ' + event.payload.method + ' ' + event.payload.url;
-                } else if (event.type === 'request') {
-                    return 'HTTP Request: ' + event.payload.method + ' ' + event.payload.url;
                 } else if (event.type === 'requestHeader') {
                     return '';
                 }
@@ -46,8 +40,6 @@
             eventDetails(event) {
                 if (event.type === 'meta') {
                     return null;
-                } else if (event.type === 'log') {
-                    return this.prettyJson(event.payload.context);
                 } else if (event.type === 'model') {
                     if (event.payload.type === 'created') {
                         return this.prettyJson(event.payload.record);
@@ -60,9 +52,6 @@
                     }
                 } else if (event.type === 'stripeWebhook') {
                     return event.payload.data;
-                } else if (event.type === 'exception') {
-                    return event.payload.file + ':' + event.payload.line + "\n\n"
-                        + event.payload.trace;
                 } else if (event.type === 'lcms') {
                     return this.prettyJson({
                         request: event.payload.request,
@@ -74,12 +63,6 @@
                         response: event.payload.response,
                         responseCode: event.payload.responseCode
                     });
-                } else if (event.type === 'request') {
-                    let details = {contents: event.payload.contents};
-                    if (event.payload.response) {
-                        details.response = event.payload.response
-                    }
-                    return this.prettyJson( details );
                 }
                 return this.prettyJson(event.payload);
             },

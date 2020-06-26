@@ -39,6 +39,6 @@ class Flow
 
     public function retrieve(): Builder
     {
-        return FlowEvents::orderByDesc('created_at');
+        return FlowEvents::orderByDesc('id');
     }
 }
