@@ -1,12 +1,14 @@
 <template>
-    <div :class="'event event-' + event.type">
-        <div class="event-summary" @click.prevent="showDetails = !showDetails">
-            <span>{{ event.title }}</span>
+    <div class="event" :style="'background-color:' + event.color" >
+        <div class="px-4 cursor-pointer flex justify-between" @click.prevent="showDetails = !showDetails">
+            <span v-html="event.title"></span>
             <span>{{ event.timestamp }}</span>
         </div>
-        <div :id="'details-' + event.event_id" class="mx-2 my-1 p-2 bg-white text-black" v-show="showDetails">
-            <pre v-html="event.details"></pre>
-        </div>
+        <collapse-transition dimension="height" :duration="300">
+            <div :id="'details-' + event.event_id" class="mx-2 bg-white text-black overflow-hidden" v-show="showDetails">
+                <pre class="p-4" v-html="event.details"></pre>
+            </div>
+        </collapse-transition>
     </div>
 </template>
 
@@ -14,6 +16,9 @@
     export default {
         name: "FlowEvent",
         props: ['event'],
+        components: {
+            'CollapseTransition': require('@ivanv/vue-collapse-transition').default
+        },
         data() {
             return {
                 'showDetails': false
@@ -22,7 +27,7 @@
         methods: {
             eventTitle(event) {
                 if (event.type === 'meta') {
-                return event.message;
+                    return event.message;
                 } else if (event.type === 'model') {
                     return this.ucfirst(event.payload.type) + ' ' + event.payload.model_name;
                 } else if (event.type === 'stripeWebhook') {
@@ -78,13 +83,6 @@
 
 <style scoped>
 
-    .event-summary {
-        padding: 0 1rem;
-        cursor: pointer;
-        display: flex;
-        justify-content: space-between;
-    }
-
     .event-meta .event-summary {
         cursor: default;
     }
@@ -102,21 +100,6 @@
         color: #f93822;
     }
 
-    .event.event-generic { background-color: #757575; }
-
     .event.event-model { background-color: #56bb8d; }
 
-    .event.event-exception { background-color: #f93822; }
-
-    .event.event-stripeWebhook { background-color: #586ada; }
-
-    .event.event-stripeHttp { background-color: #586ada; }
-
-    .event.event-log { background-color: #999; }
-
-    .event.event-lcms { background-color: #daa25e; }
-
-    .event.event-request { background-color: #955eda; }
-
-    .event.event-requestHeader { background-color: white; color: black; }
 </style>

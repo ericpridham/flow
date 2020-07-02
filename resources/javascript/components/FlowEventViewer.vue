@@ -69,7 +69,7 @@
                 }
 
                 for (let [requestId, events] of grouped.entries()) {
-                    flattened.push({'type': 'requestHeader', 'request_id': requestId});
+                    flattened.push({'type': 'requestHeader', 'request_id': requestId, 'color': 'white'});
                     flattened.push(...events);
                 }
 

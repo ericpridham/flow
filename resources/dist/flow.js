@@ -86,6 +86,17 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./node_modules/@ivanv/vue-collapse-transition/dist/collapse-transition.js":
+/*!*********************************************************************************!*\
+  !*** ./node_modules/@ivanv/vue-collapse-transition/dist/collapse-transition.js ***!
+  \*********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+!function(e,t){if(true)module.exports=t();else { var i, n; }}(window,function(){return function(e){var t={};function n(i){if(t[i])return t[i].exports;var s=t[i]={i:i,l:!1,exports:{}};return e[i].call(s.exports,s,s.exports,n),s.l=!0,s.exports}return n.m=e,n.c=t,n.d=function(e,t,i){n.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:i})},n.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},n.t=function(e,t){if(1&t&&(e=n(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var i=Object.create(null);if(n.r(i),Object.defineProperty(i,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var s in e)n.d(i,s,function(t){return e[t]}.bind(null,s));return i},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="/",n(n.s=1)}([function(e,t,n){"use strict";var i=function(e,t,n,i,s,o,r,a){var u,c="function"==typeof e?e.options:e;if(t&&(c.render=t,c.staticRenderFns=n,c._compiled=!0),i&&(c.functional=!0),o&&(c._scopeId="data-v-"+o),r?(u=function(e){(e=e||this.$vnode&&this.$vnode.ssrContext||this.parent&&this.parent.$vnode&&this.parent.$vnode.ssrContext)||"undefined"==typeof __VUE_SSR_CONTEXT__||(e=__VUE_SSR_CONTEXT__),s&&s.call(this,e),e&&e._registeredComponents&&e._registeredComponents.add(r)},c._ssrRegister=u):s&&(u=a?function(){s.call(this,this.$root.$options.shadowRoot)}:s),u)if(c.functional){c._injectStyles=u;var l=c.render;c.render=function(e,t){return u.call(t),l(e,t)}}else{var d=c.beforeCreate;c.beforeCreate=d?[].concat(d,u):[u]}return{exports:e,options:c}}({name:"CollapseTransition",props:{name:{type:String,required:!1,default:"collapse"},dimension:{type:String,required:!1,default:"height",validator:function(e){return["height","width"].includes(e)}},duration:{type:Number,required:!1,default:300},easing:{type:String,required:!1,default:"ease-in-out"}},watch:{dimension:function(){this.cachedStyles=null}},data:function(){return{cachedStyles:null}},computed:{transition:function(){var e=this,t=[];return Object.keys(this.cachedStyles).forEach(function(n){t.push("".concat(e.convertToCssProperty(n)," ").concat(e.duration,"ms ").concat(e.easing))}),t.join(", ")}},methods:{enter:function(e,t){this.detectAndCacheDimensions(e),this.setClosedDimensions(e),this.hideOverflow(e),this.forceRepaint(e),this.setTransition(e),this.setOpenedDimensions(e),setTimeout(t,this.duration)},afterEnter:function(e){this.unsetOverflow(e),this.unsetTransition(e),this.unsetDimensions(e)},leave:function(e,t){this.detectAndCacheDimensions(e),this.setOpenedDimensions(e),this.hideOverflow(e),this.forceRepaint(e),this.setTransition(e),this.setClosedDimensions(e),setTimeout(t,this.duration)},afterLeave:function(e){this.unsetOverflow(e),this.unsetTransition(e),this.unsetDimensions(e)},detectAndCacheDimensions:function(e){if(!this.cachedStyles){var t=e.style.visibility,n=e.style.display;e.style.visibility="hidden",e.style.display="",this.cachedStyles=this.detectRelevantDimensions(e),e.style.visibility=t,e.style.display=n}},detectRelevantDimensions:function(e){return"height"===this.dimension?{height:e.offsetHeight+"px",paddingTop:e.style.paddingTop||this.getCssValue(e,"padding-top"),paddingBottom:e.style.paddingBottom||this.getCssValue(e,"padding-bottom")}:"width"===this.dimension?{width:e.offsetWidth+"px",paddingLeft:e.style.paddingLeft||this.getCssValue(e,"padding-left"),paddingRight:e.style.paddingRight||this.getCssValue(e,"padding-right")}:{}},setTransition:function(e){e.style.transition=this.transition},unsetTransition:function(e){e.style.transition=""},hideOverflow:function(e){e.style.overflow="hidden"},unsetOverflow:function(e){e.style.overflow=""},setClosedDimensions:function(e){Object.keys(this.cachedStyles).forEach(function(t){e.style[t]="0"})},setOpenedDimensions:function(e){var t=this;Object.keys(this.cachedStyles).forEach(function(n){e.style[n]=t.cachedStyles[n]})},unsetDimensions:function(e){Object.keys(this.cachedStyles).forEach(function(t){e.style[t]=""})},forceRepaint:function(e){getComputedStyle(e)[this.dimension]},getCssValue:function(e,t){return getComputedStyle(e,null).getPropertyValue(t)},convertToCssProperty:function(e){var t=e.match(/([A-Z])/g);if(!t)return e;for(var n=0,i=t.length;n<i;n++)e=e.replace(new RegExp(t[n]),"-"+t[n].toLowerCase());return"-"===e.slice(0,1)&&(e=e.slice(1)),e}}},function(){var e=this.$createElement;return(this._self._c||e)("transition",{attrs:{name:this.name},on:{enter:this.enter,"after-enter":this.afterEnter,leave:this.leave,"after-leave":this.afterLeave}},[this._t("default")],2)},[],!1,null,null,null);t.a=i.exports},function(e,t,n){e.exports=n(2)},function(e,t,n){"use strict";n.r(t),function(e){n.d(t,"install",function(){return s});var i=n(0);function s(e){e.component("CollapseTransition",i.a)}n.d(t,"CollapseTransition",function(){return i.a}),t.default=i.a;var o={install:s},r=null;"undefined"!=typeof window?r=window.Vue:void 0!==e&&(r=e.Vue),r&&r.use(o)}.call(this,n(3))},function(e,t){var n;n=function(){return this}();try{n=n||new Function("return this")()}catch(e){"object"==typeof window&&(n=window)}e.exports=n}])});
+
+/***/ }),
+
 /***/ "./node_modules/axios/index.js":
 /*!*************************************!*\
   !*** ./node_modules/axios/index.js ***!
@@ -1920,9 +1931,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "FlowEvent",
   props: ['event'],
+  components: {
+    'CollapseTransition': __webpack_require__(/*! @ivanv/vue-collapse-transition */ "./node_modules/@ivanv/vue-collapse-transition/dist/collapse-transition.js")["default"]
+  },
   data: function data() {
     return {
       'showDetails': false
@@ -2115,7 +2131,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
           flattened.push({
             'type': 'requestHeader',
-            'request_id': requestId
+            'request_id': requestId,
+            'color': 'white'
           });
           flattened.push.apply(flattened, _toConsumableArray(events));
         }
@@ -2288,7 +2305,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".event-summary[data-v-5216568d] {\n  padding: 0 1rem;\n  cursor: pointer;\n  display: flex;\n  justify-content: space-between;\n}\n.event-meta .event-summary[data-v-5216568d] {\n  cursor: default;\n}\n.event[data-v-5216568d] {\n  color: white;\n  margin: 0.25rem;\n  padding: 1rem 0;\n  background-color: #747538;\n}\n.event.event-meta[data-v-5216568d] {\n  background-color: white;\n  border: 2px solid #f93822;\n  color: #f93822;\n}\n.event.event-generic[data-v-5216568d] { background-color: #757575;\n}\n.event.event-model[data-v-5216568d] { background-color: #56bb8d;\n}\n.event.event-exception[data-v-5216568d] { background-color: #f93822;\n}\n.event.event-stripeWebhook[data-v-5216568d] { background-color: #586ada;\n}\n.event.event-stripeHttp[data-v-5216568d] { background-color: #586ada;\n}\n.event.event-log[data-v-5216568d] { background-color: #999;\n}\n.event.event-lcms[data-v-5216568d] { background-color: #daa25e;\n}\n.event.event-request[data-v-5216568d] { background-color: #955eda;\n}\n.event.event-requestHeader[data-v-5216568d] { background-color: white; color: black;\n}\n", ""]);
+exports.push([module.i, ".event-meta .event-summary[data-v-5216568d] {\n  cursor: default;\n}\n.event[data-v-5216568d] {\n  color: white;\n  margin: 0.25rem;\n  padding: 1rem 0;\n  background-color: #747538;\n}\n.event.event-meta[data-v-5216568d] {\n  background-color: white;\n  border: 2px solid #f93822;\n  color: #f93822;\n}\n.event.event-model[data-v-5216568d] { background-color: #56bb8d;\n}\n\n", ""]);
 
 // exports
 
@@ -21217,42 +21234,58 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { class: "event event-" + _vm.event.type }, [
-    _c(
-      "div",
-      {
-        staticClass: "event-summary",
-        on: {
-          click: function($event) {
-            $event.preventDefault()
-            _vm.showDetails = !_vm.showDetails
+  return _c(
+    "div",
+    { staticClass: "event", style: "background-color:" + _vm.event.color },
+    [
+      _c(
+        "div",
+        {
+          staticClass: "px-4 cursor-pointer flex justify-between",
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              _vm.showDetails = !_vm.showDetails
+            }
           }
-        }
-      },
-      [
-        _c("span", [_vm._v(_vm._s(_vm.event.title))]),
-        _vm._v(" "),
-        _c("span", [_vm._v(_vm._s(_vm.event.timestamp))])
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.showDetails,
-            expression: "showDetails"
-          }
-        ],
-        staticClass: "mx-2 my-1 p-2 bg-white text-black",
-        attrs: { id: "details-" + _vm.event.event_id }
-      },
-      [_c("pre", { domProps: { innerHTML: _vm._s(_vm.event.details) } })]
-    )
-  ])
+        },
+        [
+          _c("span", { domProps: { innerHTML: _vm._s(_vm.event.title) } }),
+          _vm._v(" "),
+          _c("span", [_vm._v(_vm._s(_vm.event.timestamp))])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "collapse-transition",
+        { attrs: { dimension: "height", duration: 300 } },
+        [
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.showDetails,
+                  expression: "showDetails"
+                }
+              ],
+              staticClass: "mx-2 bg-white text-black overflow-hidden",
+              attrs: { id: "details-" + _vm.event.event_id }
+            },
+            [
+              _c("pre", {
+                staticClass: "p-4",
+                domProps: { innerHTML: _vm._s(_vm.event.details) }
+              })
+            ]
+          )
+        ]
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

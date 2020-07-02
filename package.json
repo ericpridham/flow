@@ -22,6 +22,7 @@
     "vue-template-compiler": "^2.6.11"
   },
   "dependencies": {
+    "@ivanv/vue-collapse-transition": "^0.2.1",
     "axios": "^0.19.2",
     "cross-env": "^7.0.2",
     "moment": "^2.24.0",

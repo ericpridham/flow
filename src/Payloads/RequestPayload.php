@@ -8,6 +8,7 @@ use Illuminate\Foundation\Http\Events\RequestHandled;
 class RequestPayload extends FlowPayload
 {
     public $type = 'request';
+    public $color = '#955EDA';
 
     public static function fromRequestHandled(RequestHandled $event)
     {

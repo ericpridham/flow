@@ -9,6 +9,7 @@ abstract class FlowPayload
     public $id;
     public $data;
     public $type = 'unknown';
+    public $color = "#757575";
 
     public function __construct(string $id = null, array $data = null)
     {

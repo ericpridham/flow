@@ -10,6 +10,7 @@ use Illuminate\Log\Events\MessageLogged;
 class LogPayload extends FlowPayload
 {
     public $type = 'log';
+    public $color = '#999';
 
     public static function fromMessageLogged(MessageLogged $event)
     {
