@@ -2,7 +2,7 @@
 
 namespace EricPridham\Flow\Tests\Unit\Watchers;
 
-use EricPridham\Flow\Flow;
+use EricPridham\Flow\Recorder\DatabaseRecorder;
 use EricPridham\Flow\Tests\FeatureTestCase;
 use Illuminate\Log\Events\MessageLogged;
 
@@ -15,7 +15,7 @@ class LogWatcherTest extends FeatureTestCase
 
         event(new MessageLogged('info', 'my log message', ['context' => true]));
 
-        $events = (new Flow)->retrieve()->get();
+        $events = (new DatabaseRecorder)->retrieve()->get();
         $this->assertCount(1, $events);
         $this->assertEquals('info', $events[0]->payload->data['level']);
         $this->assertEquals('my log message', $events[0]->payload->data['message']);

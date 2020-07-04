@@ -2,6 +2,7 @@
 
 namespace EricPridham\Flow;
 
+use EricPridham\Flow\Recorder\DatabaseRecorder;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,7 +21,11 @@ class FlowServiceProvider extends ServiceProvider
         $this->loadRoutes();
 
         $flow = new Flow();
-        $flow->register(config('flow.watchers'));
+        $flow->registerWatchers(config('flow.watchers')??[]);
+        if (config('flow.local.record')) {
+            $flow->registerRecorders([DatabaseRecorder::class]);
+        }
+        $flow->registerRecorders(config('flow.recorders')??[]);
 
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
@@ -88,7 +93,7 @@ class FlowServiceProvider extends ServiceProvider
     {
         Route::group([
             'namespace' => 'EricPridham\Flow\Http\Controllers',
-            'prefix' => config('flow.path')
+            'prefix' => config('flow.local.path')
         ], function () {
             $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
         });

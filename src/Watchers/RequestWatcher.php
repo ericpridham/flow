@@ -13,7 +13,7 @@ class RequestWatcher implements FlowWatcher
     public function register(Flow $flow): void
     {
         Event::listen(RequestHandled::class, function (RequestHandled $event) use ($flow) {
-            if ($event->request->is(config('flow.path') . '*')) {
+            if ($event->request->is(config('flow.local.path') . '*')) {
                 return;
             }
             $flow->record(RequestPayload::fromRequestHandled($event));

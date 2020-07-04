@@ -2,7 +2,7 @@
 
 namespace EricPridham\Flow\Tests\Unit\Watchers;
 
-use EricPridham\Flow\Flow;
+use EricPridham\Flow\Recorder\DatabaseRecorder;
 use EricPridham\Flow\Tests\FeatureTestCase;
 use Illuminate\Log\Events\MessageLogged;
 
@@ -16,7 +16,7 @@ class ExceptionWatcherTest extends FeatureTestCase
         $exception = new \Exception('message', 123);
         event(new MessageLogged(null, null, ['exception' => $exception]));
 
-        $events = (new Flow)->retrieve()->get();
+        $events = (new DatabaseRecorder)->retrieve()->get();
         $this->assertCount(1, $events);
 
         $this->assertEquals('message', $events[0]->payload->data['message']);

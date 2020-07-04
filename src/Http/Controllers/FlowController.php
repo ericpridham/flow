@@ -3,7 +3,7 @@
 namespace EricPridham\Flow\Http\Controllers;
 
 use Carbon\Carbon;
-use EricPridham\Flow\Flow;
+use EricPridham\Flow\Recorder\DatabaseRecorder;
 use Illuminate\Routing\Controller;
 
 class FlowController extends Controller
@@ -13,10 +13,10 @@ class FlowController extends Controller
         return view('flow::flow');
     }
 
-    public function events(Flow $flow)
+    public function events(DatabaseRecorder $databaseRecorder)
     {
         return response()->json(
-            $flow->retrieve()
+            $databaseRecorder->retrieve()
                 ->where('created_at', '>', Carbon::now()->subMinutes(30))
                 ->get()
         );
