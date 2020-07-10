@@ -22,9 +22,6 @@ class FlowServiceProvider extends ServiceProvider
 
         $flow = new Flow();
         $flow->registerWatchers(config('flow.watchers')??[]);
-        if (config('flow.local.record')) {
-            $flow->registerRecorders([DatabaseRecorder::class]);
-        }
         $flow->registerRecorders(config('flow.recorders')??[]);
 
         // Publishing is only necessary when using the CLI.
@@ -93,7 +90,7 @@ class FlowServiceProvider extends ServiceProvider
     {
         Route::group([
             'namespace' => 'EricPridham\Flow\Http\Controllers',
-            'prefix' => config('flow.local.path')
+            'prefix' => config('flow.path')
         ], function () {
             $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
         });

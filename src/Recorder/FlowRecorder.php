@@ -6,6 +6,6 @@ use EricPridham\Flow\Interfaces\FlowPayload;
 
 interface FlowRecorder
 {
-    public function init();
-    public function record(string $requestId, FlowPayload $payload);
+    public function init(array $params): void;
+    public function record(string $requestId, FlowPayload $payload): void;
 }

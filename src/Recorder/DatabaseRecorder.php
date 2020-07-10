@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Builder;
 
 class DatabaseRecorder implements FlowRecorder
 {
-    public function init()
+    public function init(array $params): void
     {
     }
 
-    public function record(string $requestId, FlowPayload $payload)
+    public function record(string $requestId, FlowPayload $payload): void
     {
         $event = new FlowEvents();
         $event->request_id = $requestId;

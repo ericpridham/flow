@@ -21,7 +21,7 @@ class Flow
 
     public function registerWatchers(array $watchers): void
     {
-        collect($watchers)->each(function ( $watcher) {
+        collect($watchers)->each(function ($watcher) {
             if (is_string($watcher)) {
                 $watcherInstance = new $watcher();
             } elseif ($watcher instanceof FlowWatcher) {
@@ -33,13 +33,21 @@ class Flow
 
     public function registerRecorders(array $recorders): void
     {
-        collect($recorders)->each(function ($recorder) {
+        collect($recorders)->each(function ($value, $key) {
+            if (is_string($key)) {
+                $initParams = $value;
+                $recorder = $key;
+            } else {
+                $initParams = [];
+                $recorder = $value;
+            }
+
             if (is_string($recorder)) {
                 $recorderInstance = new $recorder();
             } elseif ($recorder instanceof FlowRecorder) {
                 $recorderInstance = $recorder;
             }
-            $recorderInstance->init();
+            $recorderInstance->init($initParams);
             $this->recorders->push($recorderInstance);
         });
     }

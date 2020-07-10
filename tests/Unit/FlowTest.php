@@ -27,9 +27,40 @@ class FlowTest extends FeatureTestCase
         $recorder = Mockery::spy(FlowRecorder::class);
 
         $flow = new Flow();
-        $flow->registerRecorders([$recorder]);
+        $flow->registerRecorders([
+            $recorder,
+            TestRecorder::class,
+        ]);
 
         $recorder->shouldHaveReceived('init');
         $this->assertTrue($flow->getRecorders()->contains($recorder));
+        $this->assertTrue(TestRecorder::$initialized);
+
+        TestRecorder::reset();
+        $this->assertFalse(TestRecorder::$initialized);
+
+        $flow->registerRecorders([
+            TestRecorder::class => [
+                'key' => 'value',
+            ]
+        ]);
+        $this->assertEquals(['key' => 'value'], TestRecorder::$lastInitParams);
+    }
+}
+
+class TestRecorder {
+    static public $lastInitParams;
+    static public $initialized = false;
+
+    public static function reset(): void
+    {
+        self::$lastInitParams = null;
+        self::$initialized = false;
+    }
+
+    public function init($params = null): void
+    {
+        self::$initialized = true;
+        self::$lastInitParams = $params;
     }
 }
