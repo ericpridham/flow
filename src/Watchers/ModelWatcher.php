@@ -12,18 +12,22 @@ class ModelWatcher
 {
     public function register(Flow $flow): void
     {
-        Event::listen('eloquent.created*', static function ($name, $data) use ($flow) {
-            if ($data[0] instanceof FlowEvents) {
-                return;
+        Event::listen('eloquent.created*', function ($name, $data) use ($flow) {
+            foreach ($data as $model) {
+                if ($model instanceof FlowEvents) {
+                    return;
+                }
+                $flow->record(ModelCreatedPayload::fromModel($model));
             }
-            $flow->record(ModelCreatedPayload::fromModel($data[0]));
         });
 
-        Event::listen('eloquent.updated*', static function ($name, $data) use ($flow) {
-            if ($data[0] instanceof FlowEvents) {
-                return;
+        Event::listen('eloquent.updated*', function ($name, $data) use ($flow) {
+            foreach ($data as $model) {
+                if ($model instanceof FlowEvents) {
+                    return;
+                }
+                $flow->record(ModelUpdatedPayload::fromModel($model));
             }
-            $flow->record(ModelUpdatedPayload::fromModel($data[0]));
         });
     }
 }
