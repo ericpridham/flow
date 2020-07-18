@@ -2,7 +2,6 @@
 
 namespace EricPridham\Flow;
 
-use EricPridham\Flow\Recorder\DatabaseRecorder;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,9 +19,11 @@ class FlowServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadRoutes();
 
-        $flow = new Flow();
-        $flow->registerWatchers(config('flow.watchers')??[]);
-        $flow->registerRecorders(config('flow.recorders')??[]);
+        if (config('flow.enabled')) {
+            $flow = new Flow();
+            $flow->registerWatchers(config('flow.watchers')??[]);
+            $flow->registerRecorders(config('flow.recorders')??[]);
+        }
 
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
