@@ -3,11 +3,12 @@
 namespace EricPridham\Flow\Watchers;
 
 use EricPridham\Flow\Flow;
+use EricPridham\Flow\Interfaces\FlowWatcher;
 use EricPridham\Flow\Payloads\ExceptionPayload;
 use Illuminate\Log\Events\MessageLogged;
 use Illuminate\Support\Facades\Event;
 
-class ExceptionWatcher
+class ExceptionWatcher implements FlowWatcher
 {
     private static $exceptionsSeen;
 

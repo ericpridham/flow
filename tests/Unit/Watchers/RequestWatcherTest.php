@@ -2,8 +2,11 @@
 
 namespace EricPridham\Flow\Tests\Unit\Watchers;
 
-use EricPridham\Flow\Recorder\DatabaseRecorder;
+use EricPridham\Flow\Flow;
+use EricPridham\Flow\Payloads\RequestPayload;
+use EricPridham\Flow\Recorder\FlowRecorder;
 use EricPridham\Flow\Tests\FeatureTestCase;
+use EricPridham\Flow\Watchers\RequestWatcher;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -14,7 +17,9 @@ class RequestWatcherTest extends FeatureTestCase
     /** @test */
     public function it_hears_a_request_event(): void
     {
-        $this->artisan('migrate', ['--database' => 'testbench']);
+        $flow = new Flow();
+        $recorder = Mockery::spy(FlowRecorder::class);
+        $flow->registerRecorders([$recorder]);
 
         $request = \Mockery::mock(Request::class);
         $request->shouldReceive([
@@ -29,13 +34,18 @@ class RequestWatcherTest extends FeatureTestCase
             'getContent' => json_encode(['response' => true])
         ]);
 
+        $flow->registerWatchers([new RequestWatcher()]);
+
         event(new RequestHandled($request, $response));
 
-        $events = (new DatabaseRecorder)->retrieve()->get();
-        $this->assertCount(1, $events);
-        $this->assertEquals('full-url', $events[0]->payload->data['url']);
-        $this->assertEquals('method', $events[0]->payload->data['method']);
-        $this->assertEquals(['foo' => 'bar'], $events[0]->payload->data['contents']);
-        $this->assertEquals(['response' => true], $events[0]->payload->data['response']);
+        $recorder->shouldHaveReceived('record',
+            function (string $requestId, RequestPayload $payload) {
+                $this->assertEquals('full-url', $payload->data['url']);
+                $this->assertEquals('method', $payload->data['method']);
+                $this->assertEquals(['foo' => 'bar'], $payload->data['contents']);
+                $this->assertEquals(['response' => true], $payload->data['response']);
+                return true;
+            }
+        );
     }
 }

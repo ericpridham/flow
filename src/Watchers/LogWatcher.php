@@ -3,11 +3,12 @@
 namespace EricPridham\Flow\Watchers;
 
 use EricPridham\Flow\Flow;
+use EricPridham\Flow\Interfaces\FlowWatcher;
 use EricPridham\Flow\Payloads\LogPayload;
 use Illuminate\Log\Events\MessageLogged;
 use Illuminate\Support\Facades\Event;
 
-class LogWatcher
+class LogWatcher implements FlowWatcher
 {
     public function register(Flow $flow): void
     {

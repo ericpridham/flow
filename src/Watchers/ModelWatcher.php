@@ -3,12 +3,13 @@
 namespace EricPridham\Flow\Watchers;
 
 use EricPridham\Flow\Flow;
+use EricPridham\Flow\Interfaces\FlowWatcher;
 use EricPridham\Flow\Models\FlowEvents;
 use EricPridham\Flow\Payloads\ModelCreatedPayload;
 use EricPridham\Flow\Payloads\ModelUpdatedPayload;
 use Illuminate\Support\Facades\Event;
 
-class ModelWatcher
+class ModelWatcher implements FlowWatcher
 {
     public function register(Flow $flow): void
     {
