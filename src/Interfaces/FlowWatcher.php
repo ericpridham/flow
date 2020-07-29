@@ -6,5 +6,5 @@ use EricPridham\Flow\Flow;
 
 interface FlowWatcher
 {
-    public function register(Flow $flow);
+    public function register(Flow $flow, array $params);
 }

@@ -16,9 +16,24 @@ class FlowTest extends FeatureTestCase
         $watcher = Mockery::spy(FlowWatcher::class);
 
         $flow = new Flow();
-        $flow->registerWatchers([$watcher]);
+        $flow->registerWatchers([
+            $watcher,
+            TestWatcher::class
+        ]);
+
+        $this->assertTrue(TestWatcher::$registered);
 
         $watcher->shouldHaveReceived('register');
+
+        TestWatcher::reset();
+        $this->assertFalse(TestWatcher::$registered);
+
+        $flow->registerWatchers([
+            TestWatcher::class => [
+                'key' => 'value',
+            ]
+        ]);
+        $this->assertEquals(['key' => 'value'], TestWatcher::$lastRegisterParams);
     }
 
     /** @test */
@@ -48,7 +63,26 @@ class FlowTest extends FeatureTestCase
     }
 }
 
-class TestRecorder {
+class TestWatcher implements FlowWatcher
+{
+    static public $lastRegisterParams;
+    static public $registered = false;
+
+    public static function reset(): void
+    {
+        self::$lastRegisterParams = null;
+        self::$registered = false;
+    }
+
+    public function register(Flow $flow, $params = null)
+    {
+        self::$registered = true;
+        self::$lastRegisterParams = $params;
+    }
+}
+
+class TestRecorder
+{
     static public $lastInitParams;
     static public $initialized = false;
 

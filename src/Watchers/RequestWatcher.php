@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Event;
 
 class RequestWatcher implements FlowWatcher
 {
-    public function register(Flow $flow): void
+    public function register(Flow $flow, array $params): void
     {
         Event::listen(RequestHandled::class, function (RequestHandled $event) use ($flow) {
             if ($event->request->is(config('flow.path') . '*')) {

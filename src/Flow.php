@@ -21,13 +21,21 @@ class Flow
 
     public function registerWatchers(array $watchers): void
     {
-        collect($watchers)->each(function ($watcher) {
+        collect($watchers)->each(function ($value, $key) {
+            if (is_string($key)) {
+                $registerParams = $value;
+                $watcher = $key;
+            } else {
+                $registerParams = [];
+                $watcher = $value;
+            }
+
             if (is_string($watcher)) {
                 $watcherInstance = new $watcher();
             } elseif ($watcher instanceof FlowWatcher) {
                 $watcherInstance = $watcher;
             }
-            $watcherInstance->register($this);
+            $watcherInstance->register($this, $registerParams);
         });
     }
 

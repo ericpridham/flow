@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Event;
 
 class LogWatcher implements FlowWatcher
 {
-    public function register(Flow $flow): void
+    public function register(Flow $flow, array $params): void
     {
         Event::listen(MessageLogged::class, function (MessageLogged $event) use ($flow) {
             if (!empty($event->context['exception'])) {

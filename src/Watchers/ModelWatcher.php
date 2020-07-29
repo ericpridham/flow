@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Event;
 
 class ModelWatcher implements FlowWatcher
 {
-    public function register(Flow $flow): void
+    public function register(Flow $flow, array $params): void
     {
         Event::listen('eloquent.created*', function ($name, $data) use ($flow) {
             foreach ($data as $model) {

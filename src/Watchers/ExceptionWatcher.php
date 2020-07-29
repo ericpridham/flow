@@ -12,7 +12,7 @@ class ExceptionWatcher implements FlowWatcher
 {
     private static $exceptionsSeen;
 
-    public function register(Flow $flow): void
+    public function register(Flow $flow, array $params): void
     {
         Event::listen(MessageLogged::class, function (MessageLogged $event) use ($flow) {
             $exception = $event->context['exception'] ?? null;
