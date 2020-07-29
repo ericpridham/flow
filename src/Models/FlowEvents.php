@@ -11,6 +11,7 @@ class FlowEvents extends Model
     protected $casts = [
         'payload_data' => 'array',
     ];
+    protected $guarded = [];
 
     public function getPayloadAttribute(): FlowPayload
     {
