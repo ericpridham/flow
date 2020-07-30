@@ -2194,7 +2194,9 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/flow/events').then(function (response) {
+    var base = window.location.href;
+    var url = base + (base.endsWith('/') ? '' : '/') + 'events';
+    axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(url).then(function (response) {
       _this.events = response.data;
       _this.loading = false;
     });

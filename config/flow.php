@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'enabled' => false,
-    'path' => 'flow',
+    'enabled' => env('FLOW_ENABLED', false),
+    'path' => env('FLOW_PATH', 'flow'),
     'watchers' => [
         EricPridham\Flow\Watchers\RequestWatcher::class,
         EricPridham\Flow\Watchers\LogWatcher::class,

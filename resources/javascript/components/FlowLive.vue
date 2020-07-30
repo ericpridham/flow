@@ -30,7 +30,9 @@
             }
         },
         mounted() {
-            axios.get('/flow/events')
+            let base = window.location.href;
+            let url = base + (base.endsWith('/') ? '' : '/') + 'events';
+            axios.get(url)
                 .then((response) => {
                     this.events = response.data;
                     this.loading = false;

@@ -2,6 +2,7 @@
 
 namespace EricPridham\Flow;
 
+use EricPridham\Flow\Console\InstallCommand;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -40,10 +41,13 @@ class FlowServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/flow.php', 'flow');
 
-        // Register the service the package provides.
         $this->app->singleton('flow', function ($app) {
             return new Flow;
         });
+
+        $this->commands([
+            InstallCommand::class
+        ]);
     }
 
     /**
