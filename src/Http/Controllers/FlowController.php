@@ -4,6 +4,7 @@ namespace EricPridham\Flow\Http\Controllers;
 
 use Carbon\Carbon;
 use EricPridham\Flow\Recorder\DatabaseRecorder;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class FlowController extends Controller
@@ -13,11 +14,20 @@ class FlowController extends Controller
         return view('flow::flow');
     }
 
-    public function events(DatabaseRecorder $databaseRecorder)
+    public function events(Request $request, DatabaseRecorder $databaseRecorder)
     {
+        $from = $request->query('from')
+            ? Carbon::createFromTimestamp($request->query('from'))
+            : Carbon::now()->subMinutes(30);
+
+        $to = $request->query('to')
+            ? Carbon::createFromTimestamp($request->query('to'))
+            : Carbon::now();
+
         return response()->json(
             $databaseRecorder->retrieve()
-                ->where('created_at', '>', Carbon::now()->subMinutes(30))
+                ->where('created_at', '>=', $from)
+                ->where('created_at', '<=', $to)
                 ->get()
         );
     }

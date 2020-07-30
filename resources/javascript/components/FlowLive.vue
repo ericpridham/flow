@@ -1,12 +1,9 @@
 <template>
     <div id="fow-live">
         <div id="flow-controls">
-            <button type="button" class="btn btn-flow btn-toggle" :class="{active: paused}" @click="togglePause">
-                <span v-if="paused">Resume</span>
-                <span v-else>Pause</span>
-            </button>
-            <button type="button" class="btn btn-flow" @click="clearEventsPrompt">Clear</button>
-            <button type="button" class="btn btn-flow" @click="saveSnapshot">Save</button>
+            <date-picker v-model="from" type="datetime" valueType="X" :minuteStep="10" :secondStep="10"></date-picker>
+            <date-picker v-model="to" type="datetime" valueType="X" :minuteStep="10" :secondStep="10"></date-picker>
+            <button type="button" class="btn btn-flow" @click.prevent="getEvents">Get</button>
         </div>
         <div v-if="loading">Loading ...</div>
         <flow-event-viewer v-else :events="events"></flow-event-viewer>
@@ -16,29 +13,48 @@
 <script>
     import moment from 'moment';
     import axios from 'axios';
+    import DatePicker from 'vue2-datepicker';
+    import 'vue2-datepicker/index.css';
 
     export default {
         name: "FlowLive",
         components: {
-            'flow-event-viewer': require('./FlowEventViewer').default
+            'flow-event-viewer': require('./FlowEventViewer').default,
+            DatePicker
         },
         data() {
             return {
                 paused: false,
                 events: [],
-                loading: true
+                loading: true,
+                from: false,
+                to: false,
             }
         },
         mounted() {
-            let base = window.location.href;
-            let url = base + (base.endsWith('/') ? '' : '/') + 'events';
-            axios.get(url)
-                .then((response) => {
-                    this.events = response.data;
-                    this.loading = false;
-                });
+            this.getEvents();
         },
         methods: {
+            getEvents() {
+                this.loading = true;
+                let base = window.location.href;
+                let url = base + (base.endsWith('/') ? '' : '/') + 'events';
+                let params = []
+                if (this.from) {
+                    params.push('from=' + this.from);
+                }
+                if (this.to) {
+                    params.push('to=' + this.to);
+                }
+                if (params.length) {
+                    url += '?' + params.join('&');
+                }
+                axios.get(url)
+                    .then((response) => {
+                        this.events = response.data;
+                        this.loading = false;
+                    });
+            },
             clearEventsPrompt() {
                 if (confirm('Clear all events?')) {
                     this.clearEvents();
