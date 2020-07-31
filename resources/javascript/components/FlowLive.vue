@@ -4,6 +4,7 @@
             <date-picker v-model="from" type="datetime" valueType="X" :minuteStep="10" :secondStep="10"></date-picker>
             <date-picker v-model="to" type="datetime" valueType="X" :minuteStep="10" :secondStep="10"></date-picker>
             <button type="button" class="btn btn-flow" @click.prevent="getEvents">Get</button>
+            <button type="button" class="btn btn-flow" @click="saveSnapshot">Save</button>
         </div>
         <div v-if="loading">Loading ...</div>
         <flow-event-viewer v-else :events="events"></flow-event-viewer>
@@ -100,12 +101,10 @@
             },
             saveSnapshot() {
                 let snapshotEvents = this.events.slice();
-                this.pauseFlow();
-                if (name = prompt('Name', moment().format('MMMM Do YYYY h:mm:ss a'))) {
-                    this.$emit('snapshot-saved', name, snapshotEvents);
-                    this.clearEvents();
+                let nameSnapshot;
+                if (nameSnapshot = prompt('Name', moment().format('MMMM Do YYYY h:mm:ss a'))) {
+                    this.$emit('snapshot-saved', nameSnapshot, snapshotEvents);
                 }
-                this.resumeFlow();
             },
         }
     }

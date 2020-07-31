@@ -25,9 +25,8 @@ class FlowController extends Controller
             : Carbon::now();
 
         return response()->json(
-            $databaseRecorder->retrieve()
-                ->where('created_at', '>=', $from)
-                ->where('created_at', '<=', $to)
+            $databaseRecorder->retrieve($from, $to)
+                ->limit(5000)
                 ->get()
         );
     }

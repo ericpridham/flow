@@ -1,5 +1,6 @@
 <script lang="babel" type="text/ecmascript-6">
     import FlowLive from "./FlowLive";
+    import FlowSaved from "./FlowSaved";
     import NavTab from "./NavTab";
 
     export default {
@@ -7,11 +8,11 @@
         components: {
             NavTab,
             FlowLive,
+            FlowSaved
         },
         data() {
             return {
                 selectedTab: 'live',
-                liveDirty: false,
                 snapshots: []
             }
         },
@@ -26,10 +27,7 @@
                 this.selectedTab = 'live';
             },
             selectSaved() {
-                if (!this.liveDirty || confirm('Are you sure?\n\nThis will clear all unsaved events.')) {
-                    this.selectedTab = 'saved';
-                    this.liveDirty = false;
-                }
+                this.selectedTab = 'saved';
             },
             saveSnapshot(name, events) {
                 this.snapshots.push({name, events});
@@ -60,10 +58,10 @@
             <nav-tab text="Saved" :active="selectedTab === 'saved'" @activate="selectedTab = 'saved'"></nav-tab>
         </ul>
         <div v-if="selectedTab === 'live'">
-            <flow-live></flow-live>
+            <flow-live @snapshot-saved="saveSnapshot"></flow-live>
         </div>
         <div v-if="selectedTab === 'saved'">
-<!--            <flow-saved :snapshots="snapshots" @snapshot-deleted="deleteSnapshot"></flow-saved>-->
+            <flow-saved :snapshots="snapshots" @snapshot-deleted="deleteSnapshot"></flow-saved>
         </div>
     </div>
 </template>
