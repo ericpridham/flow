@@ -3,6 +3,7 @@
 return [
     'enabled' => env('FLOW_ENABLED', false),
     'path' => env('FLOW_PATH', 'flow'),
+    'middleware' => [],
     'watchers' => [
         EricPridham\Flow\Watchers\RequestWatcher::class,
         EricPridham\Flow\Watchers\LogWatcher::class,

@@ -95,7 +95,8 @@ class FlowServiceProvider extends ServiceProvider
     {
         Route::group([
             'namespace' => 'EricPridham\Flow\Http\Controllers',
-            'prefix' => config('flow.path')
+            'prefix' => config('flow.path'),
+            'middleware' => config('flow.middleware')
         ], function () {
             $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
         });
