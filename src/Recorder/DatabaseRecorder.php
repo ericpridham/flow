@@ -21,10 +21,15 @@ class DatabaseRecorder implements FlowRecorder
         $event->save();
     }
 
-    public function retrieve(Carbon $from, Carbon $to): Builder
+    public function retrieve(Carbon $from = null, Carbon $to = null): Builder
     {
-        return FlowEvents::query()
-            ->where('created_at', '>=', $from)
-            ->where('created_at', '<=', $to);
+        $query = FlowEvents::query();
+        if ($from) {
+            $query->where('created_at', '>=', $from);
+        }
+        if ($to) {
+            $query->where('created_at', '<=', $to);
+        }
+        return $query;
     }
 }

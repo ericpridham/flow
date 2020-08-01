@@ -15,6 +15,14 @@ class CreateFlowEventsTable extends Migration
             $table->string('payload_class');
             $table->json('payload_data');
             $table->timestamps();
+
+            $table->index('request_id');
+            $table->index('created_at');
         });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('flow_events');
     }
 }
