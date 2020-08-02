@@ -13,6 +13,8 @@ class FlowEvents extends Model
     ];
     protected $guarded = [];
 
+    protected $dateFormat = 'Y-m-d H:i:s.u';
+
     public function getPayloadAttribute(): FlowPayload
     {
         $class = class_exists($this->payload_class)? $this->payload_class : GenericPayload::class;

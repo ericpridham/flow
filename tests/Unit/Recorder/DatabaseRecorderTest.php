@@ -53,7 +53,7 @@ class DatabaseRecorderTest extends FeatureTestCase
         $payload = new RequestPayload('id', ['data' => 'foo']);
 
         $recorder = new DatabaseRecorder();
-        $eventTime = Carbon::now()->subDays(2)->setTime(0,0,0);
+        $eventTime = Carbon::now()->subDays(2);
         $recorder->record('requestId', $payload, $eventTime);
 
         $event = $recorder->retrieve()->first();
