@@ -13,23 +13,27 @@ class DatabaseRecorder implements FlowRecorder
     {
     }
 
-    public function record(string $requestId, FlowPayload $payload): void
+    public function record(string $requestId, FlowPayload $payload, Carbon $at = null): void
     {
         $event = new FlowEvents();
         $event->request_id = $requestId;
         $event->payload = $payload;
+        if ($at) {
+            $event->created_at = $at;
+        }
         $event->save();
     }
 
     public function retrieve(Carbon $from = null, Carbon $to = null): Builder
     {
-        $query = FlowEvents::query();
+        $subquery = FlowEvents::query();
         if ($from) {
-            $query->where('created_at', '>=', $from);
+            $subquery->where('created_at', '>=', $from);
         }
         if ($to) {
-            $query->where('created_at', '<=', $to);
+            $subquery->where('created_at', '<=', $to);
         }
-        return $query;
+
+        return FlowEvents::whereIn('request_id', $subquery->select('request_id'));
     }
 }

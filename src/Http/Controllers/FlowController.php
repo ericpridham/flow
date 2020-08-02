@@ -16,13 +16,12 @@ class FlowController extends Controller
 
     public function events(Request $request, DatabaseRecorder $databaseRecorder)
     {
-        $from = $request->query('from')
-            ? Carbon::createFromTimestamp($request->query('from'))
-            : Carbon::now()->subMinutes(30);
+        $from = $request->query('from') ? Carbon::createFromTimestamp($request->query('from')) : null;
+        $to = $request->query('to') ? Carbon::createFromTimestamp($request->query('to')) : null;
 
-        $to = $request->query('to')
-            ? Carbon::createFromTimestamp($request->query('to'))
-            : Carbon::now();
+        if (!$from && !$to) {
+            $from = Carbon::now()->subMinutes(30);
+        }
 
         return response()->json(
             $databaseRecorder->retrieve($from, $to)
