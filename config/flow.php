@@ -10,6 +10,7 @@ return [
         EricPridham\Flow\Watchers\ExceptionWatcher::class,
         EricPridham\Flow\Watchers\ModelWatcher::class,
         EricPridham\Flow\Watchers\QueryWatcher::class,
+        EricPridham\Flow\Watchers\CommandWatcher::class,
     ],
     'recorders' => [
         EricPridham\Flow\Recorder\DatabaseRecorder::class,
