@@ -6,11 +6,18 @@ use Carbon\Carbon;
 use EricPridham\Flow\Interfaces\FlowPayload;
 use EricPridham\Flow\Models\FlowEvents;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 class DatabaseRecorder implements FlowRecorder
 {
-    public function init(array $params): void
+    /**
+     * @var Collection
+     */
+    protected $events;
+
+    public function init(array $params = []): void
     {
+        $this->events = collect();
     }
 
     public function record(string $requestId, FlowPayload $payload, Carbon $at = null): void
@@ -21,7 +28,7 @@ class DatabaseRecorder implements FlowRecorder
         if ($at) {
             $event->created_at = $at;
         }
-        $event->save();
+        $this->events->add($event);
     }
 
     public function retrieve(Carbon $from = null, Carbon $to = null): Builder
@@ -35,5 +42,22 @@ class DatabaseRecorder implements FlowRecorder
         }
 
         return FlowEvents::whereIn('request_id', $subquery->select('request_id'));
+    }
+
+    public function store()
+    {
+        if (!$this->events) {
+            return;
+        }
+
+        $this->events->each(function ($event) { $event->save(); });
+    }
+
+    public function __destruct()
+    {
+        try {
+            $this->store();
+        } catch (Exception $exception) {
+        }
     }
 }

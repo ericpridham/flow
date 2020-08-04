@@ -19,21 +19,30 @@ class QueryWatcher implements FlowWatcher
             $patterns = collect($params['filter'] ?? [])
                 ->push(FlowEvents::class)
                 ->map(function ($param) {
-                    if (class_exists($param)) {
-                        $model = new $param;
-                        if (!($model instanceof Model)) {
-                            throw new \RuntimeException("Must be a model class [$param]");
-                        }
-                        $table = (new $param)->getTable();
-                    } else {
-                        $table = $param;
-                    }
-                    return '*"' . $table . '"*';
+                    return '*"' . $this->getTableName($param) . '"*';
                 })->toArray();
             if (Str::is($patterns, $event->sql)) {
                 return;
             }
             $flow->record(QueryPayload::fromQueryExecuted($event));
         });
+    }
+
+    /**
+     * @param $param
+     * @return mixed
+     */
+    public function getTableName($param)
+    {
+        if (class_exists($param)) {
+            $model = new $param;
+            if (!($model instanceof Model)) {
+                throw new \RuntimeException("Must be a model class [$param]");
+            }
+            $table = (new $param)->getTable();
+        } else {
+            $table = $param;
+        }
+        return $table;
     }
 }

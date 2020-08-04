@@ -18,7 +18,9 @@ class DatabaseRecorderTest extends FeatureTestCase
         $payload = new GenericPayload('id', ['data' => 'foo']);
 
         $recorder = new DatabaseRecorder();
+        $recorder->init();
         $recorder->record('requestId', $payload);
+        $recorder->store();
 
         $events = $recorder->retrieve()->get();
         $this->assertCount(1, $events);
@@ -38,7 +40,9 @@ class DatabaseRecorderTest extends FeatureTestCase
         $payload = new RequestPayload('id', ['data' => 'foo']);
 
         $recorder = new DatabaseRecorder();
+        $recorder->init();
         $recorder->record('requestId', $payload);
+        $recorder->store();
 
         $events = $recorder->retrieve();
 
@@ -54,7 +58,9 @@ class DatabaseRecorderTest extends FeatureTestCase
 
         $recorder = new DatabaseRecorder();
         $eventTime = Carbon::now()->subDays(2);
+        $recorder->init();
         $recorder->record('requestId', $payload, $eventTime);
+        $recorder->store();
 
         $event = $recorder->retrieve()->first();
 
@@ -70,8 +76,10 @@ class DatabaseRecorderTest extends FeatureTestCase
         $payload = new RequestPayload('id', ['data' => 'foo']);
 
         $recorder = new DatabaseRecorder();
+        $recorder->init();
         $recorder->record('requestId', $payload, Carbon::now()->subDays(2));
         $recorder->record('requestId', $payload);
+        $recorder->store();
 
         $this->assertEquals(2, $recorder->retrieve(Carbon::now()->subDays(1))->count());
     }
