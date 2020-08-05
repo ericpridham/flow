@@ -22,6 +22,8 @@ class CommandPayload extends FlowPayload
 
     public function getTitle(): string
     {
-        return 'Command: ' . $this->data['command'] . ' [' . $this->data['exit_code'] . ']';
+        return 'Command: '
+            . $this->data['command']
+            . ' <span style="opacity: 0.7;">exit ' . $this->data['exit_code'] . '</span>';
     }
 }

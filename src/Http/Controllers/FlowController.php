@@ -25,6 +25,7 @@ class FlowController extends Controller
 
         return response()->json(
             $databaseRecorder->retrieve($from, $to)
+                ->orderBy('created_at')
                 ->limit(5000)
                 ->get()
         );

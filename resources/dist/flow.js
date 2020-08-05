@@ -2193,8 +2193,29 @@ __webpack_require__.r(__webpack_exports__);
       paused: false,
       events: [],
       loading: true,
-      from: false,
-      to: false
+      from: moment__WEBPACK_IMPORTED_MODULE_0___default()().toDate(),
+      to: false,
+      dateShortcuts: [{
+        text: 'Now',
+        onClick: function onClick() {
+          return moment__WEBPACK_IMPORTED_MODULE_0___default()().toDate();
+        }
+      }, {
+        text: '30m Ago',
+        onClick: function onClick() {
+          return moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(30, 'm').toDate();
+        }
+      }, {
+        text: '60m Ago',
+        onClick: function onClick() {
+          return moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(60, 'm').toDate();
+        }
+      }, {
+        text: '1d Ago',
+        onClick: function onClick() {
+          return moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, 'd').toDate();
+        }
+      }]
     };
   },
   mounted: function mounted() {
@@ -2210,11 +2231,11 @@ __webpack_require__.r(__webpack_exports__);
       var params = [];
 
       if (this.from) {
-        params.push('from=' + this.from);
+        params.push('from=' + moment__WEBPACK_IMPORTED_MODULE_0___default()(this.from).unix());
       }
 
       if (this.to) {
-        params.push('to=' + this.to);
+        params.push('to=' + moment__WEBPACK_IMPORTED_MODULE_0___default()(this.to).unix());
       }
 
       if (params.length) {
@@ -43233,9 +43254,9 @@ var render = function() {
           _c("date-picker", {
             attrs: {
               type: "datetime",
-              valueType: "X",
               minuteStep: 10,
-              secondStep: 10
+              secondStep: 10,
+              shortcuts: _vm.dateShortcuts
             },
             model: {
               value: _vm.from,
@@ -43249,9 +43270,9 @@ var render = function() {
           _c("date-picker", {
             attrs: {
               type: "datetime",
-              valueType: "X",
               minuteStep: 10,
-              secondStep: 10
+              secondStep: 10,
+              shortcuts: _vm.dateShortcuts
             },
             model: {
               value: _vm.to,
