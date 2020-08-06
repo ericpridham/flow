@@ -19,7 +19,7 @@ class QueryWatcher implements FlowWatcher
             $patterns = collect($params['filter'] ?? [])
                 ->push(FlowEvents::class)
                 ->map(function ($param) {
-                    return '*"' . $this->getTableName($param) . '"*';
+                    return '*' . $this->getTableName($param) . '*';
                 })->toArray();
             if (Str::is($patterns, $event->sql)) {
                 return;
