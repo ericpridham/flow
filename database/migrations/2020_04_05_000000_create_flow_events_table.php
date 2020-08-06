@@ -13,7 +13,7 @@ class CreateFlowEventsTable extends Migration
             $table->string('request_id');
             $table->string('event_id');
             $table->string('payload_class');
-            $table->json('payload_data');
+            $table->text('payload_data');
             $table->timestamps(6);
 
             $table->index('request_id');
