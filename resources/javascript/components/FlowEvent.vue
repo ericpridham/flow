@@ -2,7 +2,7 @@
     <div class="event py-3 m-1 text-white" :style="'background-color:' + event.color" >
         <div class="px-4 cursor-pointer flex justify-between" @click.prevent="showDetails = !showDetails">
             <span v-html="event.title"></span>
-            <span>{{ event.timestamp }}</span>
+            <span class="whitespace-no-wrap">{{ event.timestamp }}</span>
         </div>
         <collapse-transition dimension="height" :duration="300">
             <div :id="'details-' + event.event_id" class="mx-2 bg-white text-black overflow-hidden" v-show="showDetails">

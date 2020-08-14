@@ -43034,7 +43034,9 @@ var render = function() {
         [
           _c("span", { domProps: { innerHTML: _vm._s(_vm.event.title) } }),
           _vm._v(" "),
-          _c("span", [_vm._v(_vm._s(_vm.event.timestamp))])
+          _c("span", { staticClass: "whitespace-no-wrap" }, [
+            _vm._v(_vm._s(_vm.event.timestamp))
+          ])
         ]
       ),
       _vm._v(" "),
