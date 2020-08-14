@@ -48,6 +48,9 @@
     .container {
         min-height: calc(100vh - 350px);
     }
+    #flow-page {
+        font-size: 14px;
+    }
 </style>
 
 <template>

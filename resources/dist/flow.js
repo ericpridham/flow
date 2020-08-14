@@ -1945,57 +1945,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    eventTitle: function eventTitle(event) {
-      if (event.type === 'meta') {
-        return event.message;
-      } else if (event.type === 'model') {
-        return this.ucfirst(event.payload.type) + ' ' + event.payload.model_name;
-      } else if (event.type === 'stripeWebhook') {
-        return 'Stripe Webhook: ' + event.payload.type;
-      } else if (event.type === 'stripeHttp') {
-        return 'Stripe HTTP: ' + event.payload.method.toUpperCase() + ' ' + event.payload.url;
-      } else if (event.type === 'lcms') {
-        return 'LCMS: ' + event.payload.method + ' ' + event.payload.url;
-      } else if (event.type === 'requestHeader') {
-        return '';
-      }
-
-      return this.ucfirst(event.type);
-    },
-    eventDetails: function eventDetails(event) {
-      if (event.type === 'meta') {
-        return null;
-      } else if (event.type === 'model') {
-        if (event.payload.type === 'created') {
-          return this.prettyJson(event.payload.record);
-        }
-
-        if (event.payload.type === 'updated') {
-          return this.prettyJson({
-            changes: event.payload.changes,
-            record: event.payload.record
-          });
-        }
-      } else if (event.type === 'stripeWebhook') {
-        return event.payload.data;
-      } else if (event.type === 'lcms') {
-        return this.prettyJson({
-          request: event.payload.request,
-          response: event.payload.response
-        });
-      } else if (event.type === 'stripeHttp') {
-        return this.prettyJson({
-          params: event.payload.params,
-          response: event.payload.response,
-          responseCode: event.payload.responseCode
-        });
-      }
-
-      return this.prettyJson(event.payload);
-    },
-    ucfirst: function ucfirst(str) {
-      return str[0].toUpperCase() + str.slice(1);
-    },
     prettyJson: function prettyJson(any) {
       return JSON.stringify(any, null, 2);
     }
@@ -2430,7 +2379,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".event-meta .event-summary[data-v-5216568d] {\n  cursor: default;\n}\n.event[data-v-5216568d] {\n  color: white;\n  margin: 0.25rem;\n  padding: 1rem 0;\n  background-color: #747538;\n}\n.event.event-meta[data-v-5216568d] {\n  background-color: white;\n  border: 2px solid #f93822;\n  color: #f93822;\n}\n.event.event-model[data-v-5216568d] { background-color: #56bb8d;\n}\n\n", ""]);
+exports.push([module.i, ".event-meta .event-summary[data-v-5216568d] {\n  cursor: default;\n}\n.event.event-meta[data-v-5216568d] {\n  background-color: white;\n  border: 2px solid #f93822;\n  color: #f93822;\n}\n\n", ""]);
 
 // exports
 
@@ -2487,7 +2436,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".container {\n  min-height: calc(100vh - 350px);\n}\n", ""]);
+exports.push([module.i, ".container {\n  min-height: calc(100vh - 350px);\n}\n#flow-page {\n  font-size: 14px;\n}\n", ""]);
 
 // exports
 
@@ -43066,7 +43015,10 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "event", style: "background-color:" + _vm.event.color },
+    {
+      staticClass: "event py-3 m-1 text-white",
+      style: "background-color:" + _vm.event.color
+    },
     [
       _c(
         "div",
