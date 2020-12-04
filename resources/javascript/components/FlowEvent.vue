@@ -1,5 +1,5 @@
 <template>
-    <div class="event py-3 m-1 text-white" :style="'background-color:' + event.color" >
+    <div class="event py-3 m-1 text-white" :class="{'opacity-50': event.faded }" :style="'background-color:' + event.color" >
         <div class="px-4 cursor-pointer flex justify-between" @click.prevent="showDetails = !showDetails">
             <span v-html="event.title"></span>
             <span class="whitespace-no-wrap">{{ event.timestamp }}</span>

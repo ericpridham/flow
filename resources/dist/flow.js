@@ -2016,7 +2016,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   computed: {
     filteredEvents: function filteredEvents() {
+      var _this = this;
+
       var filtered = this.events.slice();
+      filtered = filtered.map(function (event) {
+        _this.$set(event, 'faded', false);
+
+        return event;
+      });
 
       if (this.searchString) {
         filtered = this.filterBySearch(filtered, this.searchString);
@@ -2031,7 +2038,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   methods: {
     filterBySearch: function filterBySearch(list, searchString) {
-      return list.filter(function (event) {
+      var matchingEvents = list.filter(function (event) {
         var eventString = JSON.stringify(event).toLowerCase();
         return searchString.split(" ").every(function (searchTerm) {
           if (!searchTerm) {
@@ -2044,6 +2051,30 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
             return eventString.includes(searchTerm.toLowerCase());
           }
         });
+      });
+
+      if (!this.groupByRequest) {
+        return matchingEvents;
+      }
+
+      var matchingRequestIds = matchingEvents.map(function (event) {
+        return event.request_id;
+      });
+      var matchingEventIds = matchingEvents.map(function (event) {
+        return event.event_id;
+      });
+      return list.filter(function (event) {
+        if (matchingRequestIds.includes(event.request_id)) {
+          if (matchingEventIds.includes(event.event_id)) {
+            event.faded = false;
+          } else {
+            event.faded = true;
+          }
+
+          return true;
+        }
+
+        return false;
       });
     },
     groupListByRequest: function groupListByRequest(list) {
@@ -43017,6 +43048,7 @@ var render = function() {
     "div",
     {
       staticClass: "event py-3 m-1 text-white",
+      class: { "opacity-50": _vm.event.faded },
       style: "background-color:" + _vm.event.color
     },
     [

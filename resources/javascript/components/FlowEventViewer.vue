@@ -30,6 +30,10 @@
         computed: {
             filteredEvents() {
                 let filtered = this.events.slice();
+                filtered = filtered.map((event) => {
+                    this.$set(event, 'faded', false);
+                    return event;
+                });
                 if (this.searchString) {
                     filtered = this.filterBySearch(filtered, this.searchString);
                 }
@@ -41,7 +45,7 @@
         },
         methods: {
             filterBySearch(list, searchString) {
-                return list.filter((event) => {
+                let matchingEvents = list.filter((event) => {
                     let eventString = JSON.stringify(event).toLowerCase();
 
                     return searchString.split(" ").every((searchTerm) => {
@@ -56,6 +60,30 @@
                         }
                     });
                 });
+
+                if (!this.groupByRequest) {
+                    return matchingEvents;
+                }
+
+                let matchingRequestIds = matchingEvents.map((event) => {
+                    return event.request_id;
+                });
+
+                let matchingEventIds = matchingEvents.map((event) => {
+                    return event.event_id;
+                });
+
+                return list.filter((event) => {
+                    if (matchingRequestIds.includes(event.request_id)) {
+                        if (matchingEventIds.includes(event.event_id)) {
+                            event.faded = false;
+                        } else {
+                            event.faded = true;
+                        }
+                        return true;
+                    }
+                    return false;
+                })
             },
             groupListByRequest(list) {
                 let grouped = new Map();
