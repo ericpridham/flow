@@ -18,16 +18,16 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "laravel-mix": "^5.0.4",
-    "vue-template-compiler": "^2.6.11"
+    "laravel-mix": "^5.0.9",
+    "vue-template-compiler": "^2.6.12"
   },
   "dependencies": {
     "@ivanv/vue-collapse-transition": "^0.2.1",
     "axios": "^0.19.2",
-    "cross-env": "^7.0.2",
-    "moment": "^2.27.0",
-    "tailwindcss": "^1.4.6",
-    "vue": "^2.6.11",
-    "vue2-datepicker": "^3.6.1"
+    "cross-env": "^7.0.3",
+    "moment": "^2.29.1",
+    "tailwindcss": "^1.9.6",
+    "vue": "^2.6.12",
+    "vue2-datepicker": "^3.8.1"
   }
 }
