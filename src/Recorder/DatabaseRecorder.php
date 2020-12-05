@@ -41,7 +41,7 @@ class DatabaseRecorder implements FlowRecorder
             $subquery->where('created_at', '<=', $to);
         }
 
-        return FlowEvents::whereIn('request_id', $subquery->select('request_id'));
+        return FlowEvents::whereIn('request_id', $subquery->pluck('request_id'));
     }
 
     public function store()
