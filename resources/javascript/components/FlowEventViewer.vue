@@ -2,7 +2,13 @@
     <div>
         <div id="flow-filters">
             Filters
-            <input v-model="searchString" placeholder="Search"/><i class="fa fa-search"></i>
+            <input v-model="searchString" v-on:keyup.enter="storeFilter" placeholder="Search"/><i class="fa fa-search"></i>
+            <div>
+                <span v-for="(filter, index) in savedFilters" class="inline-block px-2 py-2 m-2 border border-black">
+                    <button class="text-red-500" @click="deleteFilter(index)">X</button>
+                    {{ filter }}
+                </span>
+            </div>
         </div>
         <div>
             <input v-model="groupByRequest" type="checkbox" id="groupByRequest"> <label for="groupByRequest">Group by Request</label>
@@ -22,20 +28,30 @@
         },
         data() {
             return {
-                searchString: null,
+                searchString: '',
+                savedFilters: [],
                 groupByRequest: true,
                 loading: true,
             }
         },
+        mounted() {
+            let storageFilters = window.localStorage.getItem('flow-filters')
+            if (storageFilters) {
+                this.savedFilters = JSON.parse(storageFilters);
+            }
+        },
         computed: {
+            fullFilterString() {
+                return this.savedFilters.join(' ') + ' ' + this.searchString;
+            },
             filteredEvents() {
                 let filtered = this.events.slice();
                 filtered = filtered.map((event) => {
                     this.$set(event, 'faded', false);
                     return event;
                 });
-                if (this.searchString) {
-                    filtered = this.filterBySearch(filtered, this.searchString);
+                if (this.fullFilterString) {
+                    filtered = this.filterBySearch(filtered, this.fullFilterString);
                 }
                 if (this.groupByRequest) {
                     filtered = this.groupListByRequest(filtered);
@@ -84,6 +100,15 @@
                     }
                     return false;
                 })
+            },
+            storeFilter() {
+                this.savedFilters.push(this.searchString);
+                this.searchString = '';
+                window.localStorage.setItem('flow-filters', JSON.stringify(this.savedFilters));
+            },
+            deleteFilter(index) {
+                this.savedFilters.splice(index, 1);
+                window.localStorage.setItem('flow-filters', JSON.stringify(this.savedFilters));
             },
             groupListByRequest(list) {
                 let grouped = new Map();

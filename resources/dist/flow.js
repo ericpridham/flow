@@ -1998,6 +1998,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "FlowEventViewer",
@@ -2009,12 +2015,23 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   data: function data() {
     return {
-      searchString: null,
+      searchString: '',
+      savedFilters: [],
       groupByRequest: true,
       loading: true
     };
   },
+  mounted: function mounted() {
+    var storageFilters = window.localStorage.getItem('flow-filters');
+
+    if (storageFilters) {
+      this.savedFilters = JSON.parse(storageFilters);
+    }
+  },
   computed: {
+    fullFilterString: function fullFilterString() {
+      return this.savedFilters.join(' ') + ' ' + this.searchString;
+    },
     filteredEvents: function filteredEvents() {
       var _this = this;
 
@@ -2025,8 +2042,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         return event;
       });
 
-      if (this.searchString) {
-        filtered = this.filterBySearch(filtered, this.searchString);
+      if (this.fullFilterString) {
+        filtered = this.filterBySearch(filtered, this.fullFilterString);
       }
 
       if (this.groupByRequest) {
@@ -2076,6 +2093,15 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
         return false;
       });
+    },
+    storeFilter: function storeFilter() {
+      this.savedFilters.push(this.searchString);
+      this.searchString = '';
+      window.localStorage.setItem('flow-filters', JSON.stringify(this.savedFilters));
+    },
+    deleteFilter: function deleteFilter(index) {
+      this.savedFilters.splice(index, 1);
+      window.localStorage.setItem('flow-filters', JSON.stringify(this.savedFilters));
     },
     groupListByRequest: function groupListByRequest(list) {
       var grouped = new Map();
@@ -26152,6 +26178,15 @@ var render = function() {
           attrs: { placeholder: "Search" },
           domProps: { value: _vm.searchString },
           on: {
+            keyup: function($event) {
+              if (
+                !$event.type.indexOf("key") &&
+                _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+              ) {
+                return null
+              }
+              return _vm.storeFilter($event)
+            },
             input: function($event) {
               if ($event.target.composing) {
                 return
@@ -26160,7 +26195,33 @@ var render = function() {
             }
           }
         }),
-        _c("i", { staticClass: "fa fa-search" })
+        _c("i", { staticClass: "fa fa-search" }),
+        _vm._v(" "),
+        _c(
+          "div",
+          _vm._l(_vm.savedFilters, function(filter, index) {
+            return _c(
+              "span",
+              { staticClass: "inline-block px-2 py-2 m-2 border border-black" },
+              [
+                _c(
+                  "button",
+                  {
+                    staticClass: "text-red-500",
+                    on: {
+                      click: function($event) {
+                        return _vm.deleteFilter(index)
+                      }
+                    }
+                  },
+                  [_vm._v("X")]
+                ),
+                _vm._v("\n                " + _vm._s(filter) + "\n            ")
+              ]
+            )
+          }),
+          0
+        )
       ]),
       _vm._v(" "),
       _c("div", [
