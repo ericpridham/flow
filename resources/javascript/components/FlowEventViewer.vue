@@ -4,7 +4,7 @@
             Filters
             <input v-model="searchString" v-on:keyup.enter="storeFilter" placeholder="Search"/><i class="fa fa-search"></i>
             <div>
-                <span v-for="(filter, index) in savedFilters" class="inline-block px-2 py-2 m-2 border border-black">
+                <span v-for="(filter, index) in savedFilters" class="inline-block p-2 mr-2 mt-4 border border-black">
                     <button class="text-red-500" @click="deleteFilter(index)">X</button>
                     {{ filter }}
                 </span>
@@ -62,18 +62,11 @@
         methods: {
             filterBySearch(list, searchString) {
                 let matchingEvents = list.filter((event) => {
-                    let eventString = JSON.stringify(event).toLowerCase();
-
                     return searchString.split(" ").every((searchTerm) => {
                         if (!searchTerm) {
                             return true;
                         }
-
-                        if (searchTerm.charAt(0) === "-") {
-                            return ! eventString.includes(searchTerm.slice(1).toLowerCase());
-                        } else {
-                            return eventString.includes(searchTerm.toLowerCase());
-                        }
+                        return this.searchMatches(searchTerm, event);
                     });
                 });
 
@@ -100,6 +93,35 @@
                     }
                     return false;
                 })
+            },
+            searchMatches(searchTerm, ev) {
+                if (searchTerm.charAt(0) === '.') {
+                    let accessor, value;
+                    accessor = searchTerm
+                    if (searchTerm.includes('=')) {
+                        [accessor, value] = searchTerm.split('=');
+                    }
+                    if (typeof value === 'undefined') {
+                        try {
+                            return eval('typeof ev.details' + accessor) !== 'undefined';
+                        } catch (error) {
+                            return false;
+                        }
+                    } else {
+                        try {
+                            return eval('ev.details' + accessor) === value;
+                        } catch (error) {
+                            return false;
+                        }
+                    }
+                }
+
+                let eventString = JSON.stringify(ev).toLowerCase();
+                if (searchTerm.charAt(0) === "-") {
+                    return !eventString.includes(searchTerm.slice(1).toLowerCase());
+                } else {
+                    return eventString.includes(searchTerm.toLowerCase());
+                }
             },
             storeFilter() {
                 this.savedFilters.push(this.searchString);

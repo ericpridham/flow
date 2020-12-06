@@ -1971,19 +1971,19 @@ function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.it
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 //
 //
@@ -2055,18 +2055,15 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   methods: {
     filterBySearch: function filterBySearch(list, searchString) {
+      var _this2 = this;
+
       var matchingEvents = list.filter(function (event) {
-        var eventString = JSON.stringify(event).toLowerCase();
         return searchString.split(" ").every(function (searchTerm) {
           if (!searchTerm) {
             return true;
           }
 
-          if (searchTerm.charAt(0) === "-") {
-            return !eventString.includes(searchTerm.slice(1).toLowerCase());
-          } else {
-            return eventString.includes(searchTerm.toLowerCase());
-          }
+          return _this2.searchMatches(searchTerm, event);
         });
       });
 
@@ -2093,6 +2090,43 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
         return false;
       });
+    },
+    searchMatches: function searchMatches(searchTerm, ev) {
+      if (searchTerm.charAt(0) === '.') {
+        var accessor, value;
+        accessor = searchTerm;
+
+        if (searchTerm.includes('=')) {
+          var _searchTerm$split = searchTerm.split('=');
+
+          var _searchTerm$split2 = _slicedToArray(_searchTerm$split, 2);
+
+          accessor = _searchTerm$split2[0];
+          value = _searchTerm$split2[1];
+        }
+
+        if (typeof value === 'undefined') {
+          try {
+            return eval('typeof ev.details' + accessor) !== 'undefined';
+          } catch (error) {
+            return false;
+          }
+        } else {
+          try {
+            return eval('ev.details' + accessor) === value;
+          } catch (error) {
+            return false;
+          }
+        }
+      }
+
+      var eventString = JSON.stringify(ev).toLowerCase();
+
+      if (searchTerm.charAt(0) === "-") {
+        return !eventString.includes(searchTerm.slice(1).toLowerCase());
+      } else {
+        return eventString.includes(searchTerm.toLowerCase());
+      }
     },
     storeFilter: function storeFilter() {
       this.savedFilters.push(this.searchString);
@@ -26202,7 +26236,7 @@ var render = function() {
           _vm._l(_vm.savedFilters, function(filter, index) {
             return _c(
               "span",
-              { staticClass: "inline-block px-2 py-2 m-2 border border-black" },
+              { staticClass: "inline-block p-2 mr-2 mt-4 border border-black" },
               [
                 _c(
                   "button",
