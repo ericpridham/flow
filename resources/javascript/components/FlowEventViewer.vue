@@ -19,6 +19,7 @@
 
 <script>
     import FlowEvent from "./FlowEvent";
+    import ObjSearch from "../lib/ObjSearch";
 
     export default {
         name: "FlowEventViewer",
@@ -102,17 +103,9 @@
                         [accessor, value] = searchTerm.split('=');
                     }
                     if (typeof value === 'undefined') {
-                        try {
-                            return eval('typeof ev.details' + accessor) !== 'undefined';
-                        } catch (error) {
-                            return false;
-                        }
+                        return ObjSearch.hasKey(ev, 'details' + accessor);
                     } else {
-                        try {
-                            return eval('ev.details' + accessor) === value;
-                        } catch (error) {
-                            return false;
-                        }
+                        return ObjSearch.get(ev, 'details' + accessor) == value;
                     }
                 }
 

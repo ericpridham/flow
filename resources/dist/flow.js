@@ -1963,6 +1963,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _FlowEvent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FlowEvent */ "./resources/javascript/components/FlowEvent.vue");
+/* harmony import */ var _lib_ObjSearch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/ObjSearch */ "./resources/javascript/lib/ObjSearch.js");
+/* harmony import */ var _lib_ObjSearch__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_lib_ObjSearch__WEBPACK_IMPORTED_MODULE_1__);
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -2004,6 +2006,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "FlowEventViewer",
@@ -2106,17 +2109,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         }
 
         if (typeof value === 'undefined') {
-          try {
-            return eval('typeof ev.details' + accessor) !== 'undefined';
-          } catch (error) {
-            return false;
-          }
+          return _lib_ObjSearch__WEBPACK_IMPORTED_MODULE_1___default.a.hasKey(ev, 'details' + accessor);
         } else {
-          try {
-            return eval('ev.details' + accessor) === value;
-          } catch (error) {
-            return false;
-          }
+          return _lib_ObjSearch__WEBPACK_IMPORTED_MODULE_1___default.a.get(ev, 'details' + accessor) == value;
         }
       }
 
@@ -43144,6 +43139,37 @@ new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     };
   }
 });
+
+/***/ }),
+
+/***/ "./resources/javascript/lib/ObjSearch.js":
+/*!***********************************************!*\
+  !*** ./resources/javascript/lib/ObjSearch.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var objSearch = {
+  get: function get(obj, key) {
+    var keys = key.split('.');
+    var ptr = obj;
+    var curKey = null;
+
+    while ((curKey = keys.shift()) !== undefined) {
+      if (!ptr.hasOwnProperty(curKey)) {
+        return undefined;
+      }
+
+      ptr = ptr[curKey];
+    }
+
+    return ptr;
+  },
+  hasKey: function hasKey(obj, key) {
+    return this.get(obj, key) !== undefined;
+  }
+};
+module.exports = objSearch;
 
 /***/ }),
 

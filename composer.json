@@ -28,7 +28,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "EricPridham\\Flow\\Tests\\": "tests"
+            "EricPridham\\Flow\\Tests\\": "tests/php"
         }
     },
     "extra": {
