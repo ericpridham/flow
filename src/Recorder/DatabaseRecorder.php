@@ -7,6 +7,7 @@ use EricPridham\Flow\Interfaces\FlowPayload;
 use EricPridham\Flow\Models\FlowEvents;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseRecorder implements FlowRecorder
 {
@@ -41,7 +42,20 @@ class DatabaseRecorder implements FlowRecorder
             $subquery->where('created_at', '<=', $to);
         }
 
-        return FlowEvents::whereIn('request_id', $subquery->pluck('request_id'));
+        return FlowEvents::whereIn('request_id',
+            // mysql does not allow you to directly reference a table in a subquery if the main query is a delete. for
+            // instance:
+            //
+            // delete from t where id in (select id from t where ...) -- mysql error!
+            //
+            // to get around this, you must then subquery the subquery:
+            //
+            // delete from t where id in (select * from (select id from t where ...) as t_ids) -- mysql happy!
+            //
+            // This does that.
+            DB::table(DB::raw("({$subquery->select('request_id')->toSql()}) as request_ids"))
+                ->mergeBindings($subquery->getQuery())
+        );
     }
 
     public function store()

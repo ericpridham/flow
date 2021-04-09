@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 
 class PurgeCommand extends Command
 {
-    protected $signature = 'flow:purge {days} {--dry}';
+    protected $signature = 'flow:purge {days} {--dry} {--y}';
     protected $description = 'Removes old flow records';
 
     public function handle(DatabaseRecorder $recorder): void
@@ -23,7 +23,7 @@ class PurgeCommand extends Command
         }
 
         $this->line($count . ' records found');
-        if ($this->confirm('Are you sure?')) {
+        if ($this->option('y') || $this->confirm('Are you sure?')) {
             $deleteCount = $query->delete();
             $this->comment($deleteCount . ' records purged');
         } else {
