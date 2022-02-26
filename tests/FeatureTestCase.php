@@ -16,6 +16,7 @@ class FeatureTestCase extends TestCase
 
     protected function getEnvironmentSetUp($app)
     {
+        $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
             'driver' => 'sqlite',
             'database' => ':memory:',

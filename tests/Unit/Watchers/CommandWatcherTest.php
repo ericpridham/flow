@@ -25,8 +25,8 @@ class CommandWatcherTest extends FeatureTestCase
 
         $input = Mockery::mock(InputInterface::class);
         $input->shouldReceive([
-            'getArguments' => 'arguments',
-            'getOptions' => 'options',
+            'getArguments' => ['arguments'],
+            'getOptions' => ['options'],
         ]);
         event(new CommandFinished('command', $input, Mockery::spy(OutputInterface::class), 3));
 
@@ -34,8 +34,8 @@ class CommandWatcherTest extends FeatureTestCase
             function (string $requestId, CommandPayload $payload) {
                 $this->assertEquals('command', $payload->data['command']);
                 $this->assertEquals('3', $payload->data['exit_code']);
-                $this->assertEquals('arguments', $payload->data['arguments']);
-                $this->assertEquals('options', $payload->data['options']);
+                $this->assertEquals(['arguments'], $payload->data['arguments']);
+                $this->assertEquals(['options'], $payload->data['options']);
                 return true;
             }
         );

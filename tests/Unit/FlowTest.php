@@ -3,6 +3,7 @@
 namespace EricPridham\Flow\Tests\Unit;
 
 use EricPridham\Flow\Flow;
+use EricPridham\Flow\Interfaces\FlowPayload;
 use EricPridham\Flow\Interfaces\FlowWatcher;
 use EricPridham\Flow\Recorder\FlowRecorder;
 use EricPridham\Flow\Tests\FeatureTestCase;
@@ -81,7 +82,7 @@ class TestWatcher implements FlowWatcher
     }
 }
 
-class TestRecorder
+class TestRecorder implements FlowRecorder
 {
     static public $lastInitParams;
     static public $initialized = false;
@@ -96,5 +97,15 @@ class TestRecorder
     {
         self::$initialized = true;
         self::$lastInitParams = $params;
+    }
+
+    public function record(string $requestId, FlowPayload $payload): void
+    {
+        // TODO: Implement record() method.
+    }
+
+    public function loadRoutes()
+    {
+        // TODO: Implement loadRoutes() method.
     }
 }

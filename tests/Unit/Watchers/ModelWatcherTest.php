@@ -8,6 +8,8 @@ use EricPridham\Flow\Payloads\ModelCreatedPayload;
 use EricPridham\Flow\Recorder\FlowRecorder;
 use EricPridham\Flow\Tests\FeatureTestCase;
 use EricPridham\Flow\Watchers\ModelWatcher;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Mockery;
 
@@ -16,14 +18,15 @@ class ModelWatcherTest extends FeatureTestCase
     /** @test */
     public function it_hears_a_model_created_event(): void
     {
+        $this->artisan('migrate', ['--database' => 'testbench']);
+
         $flow = new Flow();
         $recorder = Mockery::spy(FlowRecorder::class);
         $flow->registerRecorders([$recorder]);
 
         $flow->registerWatchers([new ModelWatcher()]);
 
-        $model = Mockery::mock(OtherModel::class)->makePartial()->shouldAllowMockingProtectedMethods();
-        $model->shouldReceive(['insertAndSetId' => null]);
+        $model = FakeFlowEvents::factory()->make();
         $model->save();
 
         $recorder->shouldHaveReceived('record',
@@ -74,12 +77,12 @@ class ModelWatcherTest extends FeatureTestCase
         $flow->registerWatchers([
             ModelWatcher::class => [
                 'filter' => [
-                    OtherModel::class
+                    FakeFlowEvents::class
                 ]
             ]
         ]);
 
-        $model = Mockery::mock(OtherModel::class)->makePartial()->shouldAllowMockingProtectedMethods();
+        $model = Mockery::mock(FakeFlowEvents::class)->makePartial()->shouldAllowMockingProtectedMethods();
         $model->shouldReceive(['insertAndSetId' => null]);
         $model->save();
 
@@ -87,6 +90,29 @@ class ModelWatcherTest extends FeatureTestCase
     }
 }
 
-class OtherModel extends Model
+/*
+ * We can just test using a FlowEvents because we explicitly filter out FlowEvents eloquent actions from being recorded
+ * in flow events.
+ */
+class FakeFlowEvents extends Model
 {
+    use HasFactory;
+
+    protected $table = 'flow_events';
+
+    protected static function newFactory()
+    {
+        return new class extends Factory {
+            protected $model = FakeFlowEvents::class;
+            public function definition()
+            {
+                return [
+                    'request_id' => $this->faker->uuid,
+                    'event_id' => $this->faker->uuid,
+                    'payload_class' => 'unknown',
+                    'payload_data' => '{}',
+                ];
+            }
+        };
+    }
 }
