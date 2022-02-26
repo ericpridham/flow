@@ -26,11 +26,12 @@ class DatabaseRecorder implements FlowRecorder
         $this->events = collect();
     }
 
-    public function record(string $requestId, FlowPayload $payload, Carbon $at = null): void
+    public function record(string $requestId, FlowPayload $payload, Carbon $at = null, $durationMs = 0): void
     {
         $event = new FlowEvents();
         $event->request_id = $requestId;
         $event->payload = $payload;
+        $event->duration_ms = $durationMs;
         if ($at) {
             $event->created_at = $at;
         }
@@ -77,5 +78,20 @@ class DatabaseRecorder implements FlowRecorder
             Route::get('/', 'FlowController@index');
             Route::get('/events', 'FlowController@events');
         });
+    }
+
+    public function recordStart(): RecordContext
+    {
+        $context = new RecordContext();
+
+        $context->start = microtime(true);
+
+        return $context;
+    }
+
+    public function recordFinish(string $requestId, FlowPayload $payload, RecordContext $context): void
+    {
+        $this->record($requestId, $payload, Carbon::createFromTimestampMs($context->start), (microtime(true) - $context->start) * 1000);
+        // TODO: Implement recordFinish() method.
     }
 }
