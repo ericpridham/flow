@@ -8,4 +8,5 @@ interface FlowRecorder
 {
     public function init(array $params): void;
     public function record(string $requestId, FlowPayload $payload): void;
+    public function loadRoutes();
 }
