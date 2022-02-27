@@ -69,29 +69,6 @@ class DatabaseRecorderTest extends FeatureTestCase
     }
 
     /** @test */
-    public function it_can_record_in_two_steps(): void
-    {
-        $this->artisan('migrate', ['--database' => 'testbench']);
-
-        $payload = new RequestPayload('id', ['data' => 'foo']);
-
-        $recorder = new DatabaseRecorder();
-        $recorder->init();
-
-        $recordContext = $recorder->recordStart();
-        sleep(1);
-        $recorder->recordFinish('requestId', $payload, $recordContext);
-        $recorder->store();
-
-        $event = $recorder->retrieve()->first();
-
-        $this->assertNotNull($event, 'Event record not found');
-        $this->assertInstanceOf(RequestPayload::class, $event->payload);
-        $this->assertEquals(Carbon::createFromTimestampMs($recordContext->start), $event->created_at);
-        $this->assertGreaterThan(1000, $event->duration_ms);
-    }
-
-    /** @test */
     public function it_retrieves_all_records_from_a_request(): void
     {
         $this->artisan('migrate', ['--database' => 'testbench']);

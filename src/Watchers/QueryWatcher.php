@@ -3,6 +3,7 @@
 namespace EricPridham\Flow\Watchers;
 
 use EricPridham\Flow\Flow;
+use EricPridham\Flow\FlowHelpers;
 use EricPridham\Flow\Interfaces\FlowWatcher;
 use EricPridham\Flow\Models\FlowEvents;
 use EricPridham\Flow\Payloads\QueryPayload;
@@ -17,14 +18,18 @@ class QueryWatcher implements FlowWatcher
     {
         Event::listen(QueryExecuted::class, function (QueryExecuted $event) use ($flow, $params) {
             $patterns = collect($params['filter'] ?? [])
-                ->push(FlowEvents::class)
+                ->push(FlowEvents::class) // never record FlowEvents queries
                 ->map(function ($param) {
                     return '*"' . $this->getTableName($param) . '"*';
                 })->toArray();
             if (Str::is($patterns, $event->sql)) {
                 return;
             }
-            $flow->record(QueryPayload::fromQueryExecuted($event));
+
+            $durationMs = $event->time;
+            $start = FlowHelpers::calcStart($durationMs);
+
+            $flow->record(QueryPayload::fromQueryExecuted($event), $start, $durationMs);
         });
     }
 

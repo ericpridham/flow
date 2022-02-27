@@ -3,6 +3,7 @@
 namespace EricPridham\Flow\Watchers;
 
 use EricPridham\Flow\Flow;
+use EricPridham\Flow\FlowHelpers;
 use EricPridham\Flow\Interfaces\FlowWatcher;
 use EricPridham\Flow\Payloads\RequestPayload;
 use EricPridham\Flow\Recorder\DatabaseRecorder;
@@ -19,7 +20,11 @@ class RequestWatcher implements FlowWatcher
             if ($event->request->is($flowPath . '*')) {
                 return;
             }
-            $flow->record(RequestPayload::fromRequestHandled($event));
+
+            $start = FlowHelpers::getAppStart() ?? $event->request->server('REQUEST_TIME_FLOAT');
+            $durationMs = FlowHelpers::calcDurationMs($start);
+
+            $flow->record(RequestPayload::fromRequestHandled($event), $start, $durationMs);
         });
     }
 }

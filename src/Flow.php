@@ -2,6 +2,7 @@
 
 namespace EricPridham\Flow;
 
+use Carbon\Carbon;
 use EricPridham\Flow\Interfaces\FlowPayload;
 use EricPridham\Flow\Interfaces\FlowWatcher;
 use EricPridham\Flow\Recorder\FlowRecorder;
@@ -61,10 +62,16 @@ class Flow
         });
     }
 
-    public function record(FlowPayload $payload): void
+    public function record(FlowPayload $payload, Carbon|float $start = null, float $durationMs = 0.0): void
     {
-        $this->recorders->each(function ($recorder) use ($payload) {
-            $recorder->record($this->request_id, $payload);
+        if (is_float($start)) {
+            $at = Carbon::createFromTimestamp($start);
+        } else {
+            $at = $start;
+        }
+
+        $this->recorders->each(function ($recorder) use ($payload, $at, $durationMs) {
+            $recorder->record($this->request_id, $payload, $at, $durationMs);
         });
     }
 

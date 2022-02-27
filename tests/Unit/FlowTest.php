@@ -101,7 +101,7 @@ class TestRecorder implements FlowRecorder
         self::$lastInitParams = $params;
     }
 
-    public function record(string $requestId, FlowPayload $payload, Carbon $at = null, int $durationMs = 0): void
+    public function record(string $requestId, FlowPayload $payload, Carbon $start = null, float $durationMs = 0): void
     {
         // TODO: Implement record() method.
     }
@@ -109,16 +109,5 @@ class TestRecorder implements FlowRecorder
     public function loadRoutes()
     {
         // TODO: Implement loadRoutes() method.
-    }
-
-    public function recordStart(): RecordContext
-    {
-        return new RecordContext();
-        // TODO: Implement recordStart() method.
-    }
-
-    public function recordFinish(string $requestId, FlowPayload $payload, RecordContext $context): void
-    {
-        // TODO: Implement recordFinish() method.
     }
 }

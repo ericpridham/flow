@@ -4,6 +4,7 @@ namespace EricPridham\Flow;
 
 use EricPridham\Flow\Console\InstallCommand;
 use EricPridham\Flow\Console\PurgeCommand;
+use EricPridham\Flow\Console\UpdateCommand;
 use Illuminate\Support\ServiceProvider;
 
 class FlowServiceProvider extends ServiceProvider
@@ -45,6 +46,7 @@ class FlowServiceProvider extends ServiceProvider
 
         $this->commands([
             InstallCommand::class,
+            UpdateCommand::class,
             PurgeCommand::class,
         ]);
     }

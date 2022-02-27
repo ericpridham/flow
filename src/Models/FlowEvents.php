@@ -42,6 +42,7 @@ class FlowEvents extends Model
             'request_id' => $this->request_id,
             'type' => $this->payload->type,
             'timestamp' => $this->created_at->format('Y-m-d g:i:s A T'),
+            'duration_ms' => number_format($this->duration_ms, 2),
             'title' => $this->payload->getTitle(),
             'details' => $this->payload->getDetails(),
             'color' => $this->payload->color,

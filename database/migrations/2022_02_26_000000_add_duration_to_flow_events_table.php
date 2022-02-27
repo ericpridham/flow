@@ -9,7 +9,7 @@ class AddDurationToFlowEventsTable extends Migration
     public function up()
     {
         Schema::table('flow_events', function (Blueprint $table) {
-            $table->integer('duration_ms')->default(0);
+            $table->float('duration_ms')->default(0.0);
         });
     }
 
