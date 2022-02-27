@@ -17,7 +17,7 @@ class OpenTracingRecorder implements FlowRecorder
 
     public function init(array $params): void
     {
-        $spanName = $params['rootSpan'] ?? 'laravel';
+        $spanName = $params['root'] ?? 'laravel';
 
         $this->tracer = $tracer = App::make(Tracer::class) ?? new NoopTracer();
 
@@ -34,7 +34,6 @@ class OpenTracingRecorder implements FlowRecorder
 
         register_shutdown_function(function () use ($scope, $tracer) {
             $scope->close();
-            /* Flush the tracer to the backend */
             $tracer->flush();
         });
     }
@@ -47,9 +46,14 @@ class OpenTracingRecorder implements FlowRecorder
         }
 
         $scope = $this->tracer->startActiveSpan($payload->type, $options);
+        $span = $scope->getSpan();
 
         foreach ($payload->data as $key => $value) {
-            $scope->getSpan()->setTag($key, print_r($value, true));
+            if (is_array($value)) {
+                $span->setTag($key, print_r($value, true));
+            } else {
+                $span->setTag($key, $value);
+            }
         }
 
         //TODO not sure if $durationMs can be force, so here it's unused
