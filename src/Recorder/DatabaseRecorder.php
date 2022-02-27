@@ -7,9 +7,13 @@ use EricPridham\Flow\Interfaces\FlowPayload;
 use EricPridham\Flow\Models\FlowEvents;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Route;
 
 class DatabaseRecorder implements FlowRecorder
 {
+    private $path;
+    private $middleware;
+
     /**
      * @var Collection
      */
@@ -17,16 +21,19 @@ class DatabaseRecorder implements FlowRecorder
 
     public function init(array $params = []): void
     {
+        $this->path = $params['path'] ?? 'flow';
+        $this->middleware = $params['middleware'] ?? [];
         $this->events = collect();
     }
 
-    public function record(string $requestId, FlowPayload $payload, Carbon $at = null): void
+    public function record(string $requestId, FlowPayload $payload, Carbon $start = null, float $durationMs = 0.0): void
     {
         $event = new FlowEvents();
         $event->request_id = $requestId;
         $event->payload = $payload;
-        if ($at) {
-            $event->created_at = $at;
+        $event->duration_ms = $durationMs;
+        if ($start) {
+            $event->created_at = $start;
         }
         $this->events->add($event);
     }
@@ -57,7 +64,19 @@ class DatabaseRecorder implements FlowRecorder
     {
         try {
             $this->store();
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
         }
+    }
+
+    public function loadRoutes()
+    {
+        Route::group([
+            'namespace' => 'EricPridham\Flow\Http\Controllers',
+            'prefix' => $this->path,
+            'middleware' => $this->middleware
+        ], function () {
+            Route::get('/', 'FlowController@index');
+            Route::get('/events', 'FlowController@events');
+        });
     }
 }

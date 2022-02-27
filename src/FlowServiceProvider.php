@@ -4,7 +4,7 @@ namespace EricPridham\Flow;
 
 use EricPridham\Flow\Console\InstallCommand;
 use EricPridham\Flow\Console\PurgeCommand;
-use Illuminate\Support\Facades\Route;
+use EricPridham\Flow\Console\UpdateCommand;
 use Illuminate\Support\ServiceProvider;
 
 class FlowServiceProvider extends ServiceProvider
@@ -16,10 +16,8 @@ class FlowServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'ericpridham');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'flow');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        $this->loadRoutes();
 
         if (config('flow.enabled')) {
             $flow = new Flow();
@@ -48,6 +46,7 @@ class FlowServiceProvider extends ServiceProvider
 
         $this->commands([
             InstallCommand::class,
+            UpdateCommand::class,
             PurgeCommand::class,
         ]);
     }
@@ -83,24 +82,5 @@ class FlowServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../resources/dist' => public_path('vendor/flow'),
         ], 'flow.views');
-
-        // Publishing the translation files.
-        /*$this->publishes([
-            __DIR__.'/../resources/lang' => resource_path('lang/vendor/ericpridham'),
-        ], 'flow.views');*/
-
-        // Registering package commands.
-        // $this->commands([]);
-    }
-
-    public function loadRoutes()
-    {
-        Route::group([
-            'namespace' => 'EricPridham\Flow\Http\Controllers',
-            'prefix' => config('flow.path'),
-            'middleware' => config('flow.middleware')
-        ], function () {
-            $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
-        });
     }
 }

@@ -4,6 +4,9 @@ namespace EricPridham\Flow\Interfaces;
 
 use Ramsey\Uuid\Uuid;
 
+/**
+ * An object to store the payload details for FlowEvent model records.
+ */
 abstract class FlowPayload
 {
     public $id;

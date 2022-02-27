@@ -9,7 +9,7 @@ class ExceptionPayload extends FlowPayload
     public $type = 'exception';
     public $color = "#F93822";
 
-    public static function fromException(\Exception $exception)
+    public static function fromException(\Throwable $exception)
     {
         return new static(null, [
             'class' => get_class($exception),

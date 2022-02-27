@@ -27,6 +27,7 @@ class RequestWatcherTest extends FeatureTestCase
             'method' => 'method',
             'all' => ['foo' => 'bar'],
             'is' => false,
+            'server' => 0.0
         ]);
 
         $response = Mockery::mock(Response::class);

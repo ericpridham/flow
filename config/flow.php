@@ -2,8 +2,6 @@
 
 return [
     'enabled' => env('FLOW_ENABLED', false),
-    'path' => env('FLOW_PATH', 'flow'),
-    'middleware' => [],
     'watchers' => [
         EricPridham\Flow\Watchers\RequestWatcher::class,
         EricPridham\Flow\Watchers\LogWatcher::class,
@@ -13,6 +11,9 @@ return [
         EricPridham\Flow\Watchers\CommandWatcher::class,
     ],
     'recorders' => [
-        EricPridham\Flow\Recorder\DatabaseRecorder::class,
+        EricPridham\Flow\Recorder\DatabaseRecorder::class => [
+            'path' => env('FLOW_PATH', 'flow'),
+            'middleware' => [],
+        ],
     ]
 ];
