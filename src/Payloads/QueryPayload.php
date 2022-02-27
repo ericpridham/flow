@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class QueryPayload extends FlowPayload
 {
-    public $type = 'model';
+    public $type = 'query';
     public $color = 'orange';
 
     public static function fromQueryExecuted(QueryExecuted $event): QueryPayload

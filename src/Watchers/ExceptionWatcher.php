@@ -30,27 +30,27 @@ class ExceptionWatcher implements FlowWatcher
     }
 
     /**
-     * @param \Exception $exception
+     * @param \Throwable $exception
      */
-    private static function markExceptionSeen(\Exception $exception): void
+    private static function markExceptionSeen(\Throwable $exception): void
     {
         self::$exceptionsSeen[self::getExceptionKey($exception)] = true;
     }
 
     /**
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @return bool
      */
-    private static function seenException(\Exception $exception): bool
+    private static function seenException(\Throwable $exception): bool
     {
         return isset(self::$exceptionsSeen[self::getExceptionKey($exception)]);
     }
 
     /**
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @return string
      */
-    private static function getExceptionKey(\Exception $exception): string
+    private static function getExceptionKey(\Throwable $exception): string
     {
         return get_class($exception);
     }

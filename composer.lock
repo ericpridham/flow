@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c65610e202331da788da5525591fe92b",
+    "content-hash": "a173b14862dcb81e9ebf56bcf599ae6e",
     "packages": [
         {
             "name": "brick/math",
@@ -4774,6 +4774,55 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v4.13.2"
             },
             "time": "2021-11-30T19:35:32+00:00"
+        },
+        {
+            "name": "opentracing/opentracing",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/opentracing/opentracing-php.git",
+                "reference": "cd60bd1fb2a25280600bc74c7f9e0c13881a9116"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/opentracing/opentracing-php/zipball/cd60bd1fb2a25280600bc74c7f9e0c13881a9116",
+                "reference": "cd60bd1fb2a25280600bc74c7f9e0c13881a9116",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1 || ^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "~0.12",
+                "phpunit/phpunit": "^7.0 || ^9.0",
+                "squizlabs/php_codesniffer": "3.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "OpenTracing\\": "src/OpenTracing/"
+                },
+                "files": [
+                    "src/OpenTracing/Tags.php",
+                    "src/OpenTracing/Formats.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "José Carlos Chávez",
+                    "email": "jcchavezs@gmail.com"
+                }
+            ],
+            "description": "OpenTracing API for PHP",
+            "support": {
+                "issues": "https://github.com/opentracing/opentracing-php/issues",
+                "source": "https://github.com/opentracing/opentracing-php/tree/1.0.2"
+            },
+            "time": "2022-01-27T19:59:21+00:00"
         },
         {
             "name": "orchestra/testbench",
