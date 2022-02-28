@@ -8,10 +8,10 @@ use EricPridham\Flow\Interfaces\FlowPayload;
 use EricPridham\Flow\Interfaces\FlowWatcher;
 use EricPridham\Flow\Recorder\FlowRecorder;
 use EricPridham\Flow\Recorder\RecordContext;
-use EricPridham\Flow\Tests\FeatureTestCase;
+use EricPridham\Flow\Tests\DatabaseTestCase;
 use Mockery;
 
-class FlowTest extends FeatureTestCase
+class FlowTest extends DatabaseTestCase
 {
     /** @test */
     public function it_can_register_watchers(): void
@@ -104,10 +104,5 @@ class TestRecorder implements FlowRecorder
     public function record(string $requestId, FlowPayload $payload, Carbon $start = null, float $durationMs = 0): void
     {
         // TODO: Implement record() method.
-    }
-
-    public function loadRoutes()
-    {
-        // TODO: Implement loadRoutes() method.
     }
 }

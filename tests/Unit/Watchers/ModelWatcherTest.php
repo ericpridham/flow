@@ -6,6 +6,7 @@ use EricPridham\Flow\Flow;
 use EricPridham\Flow\Models\FlowEvents;
 use EricPridham\Flow\Payloads\ModelCreatedPayload;
 use EricPridham\Flow\Recorder\FlowRecorder;
+use EricPridham\Flow\Tests\DatabaseTestCase;
 use EricPridham\Flow\Tests\FeatureTestCase;
 use EricPridham\Flow\Watchers\ModelWatcher;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -13,13 +14,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Mockery;
 
-class ModelWatcherTest extends FeatureTestCase
+class ModelWatcherTest extends DatabaseTestCase
 {
     /** @test */
     public function it_hears_a_model_created_event(): void
     {
-        $this->artisan('migrate', ['--database' => 'testbench']);
-
         $flow = new Flow();
         $recorder = Mockery::spy(FlowRecorder::class);
         $flow->registerRecorders([$recorder]);
@@ -42,8 +41,6 @@ class ModelWatcherTest extends FeatureTestCase
     /** @test */
     public function it_always_filters_flow_events(): void
     {
-        $this->artisan('migrate', ['--database' => 'testbench']);
-
         $flow = new Flow();
         $recorder = Mockery::spy(FlowRecorder::class);
         $flow->registerRecorders([$recorder]);
@@ -82,8 +79,9 @@ class ModelWatcherTest extends FeatureTestCase
             ]
         ]);
 
-        $model = Mockery::mock(FakeFlowEvents::class)->makePartial()->shouldAllowMockingProtectedMethods();
-        $model->shouldReceive(['insertAndSetId' => null]);
+//        $model = Mockery::mock(FakeFlowEvents::class)->makePartial()->shouldAllowMockingProtectedMethods();
+//        $model->shouldReceive(['insertAndSetId' => null]);
+        $model = FakeFlowEvents::factory()->make();
         $model->save();
 
         $recorder->shouldNotHaveReceived('record');

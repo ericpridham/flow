@@ -5,10 +5,16 @@ namespace EricPridham\Flow;
 use EricPridham\Flow\Console\InstallCommand;
 use EricPridham\Flow\Console\PurgeCommand;
 use EricPridham\Flow\Console\UpdateCommand;
+use EricPridham\Flow\Recorder\DatabaseRecorder;
 use Illuminate\Support\ServiceProvider;
 
 class FlowServiceProvider extends ServiceProvider
 {
+    // a bit hacky, want recorders to have their own migrations that are only run when the recorder is registered
+    private $migrations = [
+        DatabaseRecorder::class => 'database/migrations'
+    ];
+
     /**
      * Perform post-registration booting of services.
      *
@@ -17,12 +23,20 @@ class FlowServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'flow');
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         if (config('flow.enabled')) {
             $flow = new Flow();
             $flow->registerWatchers(config('flow.watchers')??[]);
             $flow->registerRecorders(config('flow.recorders')??[]);
+        }
+
+        // load all recorder migrations
+        if (isset($flow)) {
+            foreach ($flow->getRecorders() as $recorder) {
+                if (isset($this->migrations[get_class($recorder)])) {
+                    $this->loadMigrationsFrom(__DIR__.'/../' . $this->migrations[get_class($recorder)]);
+                }
+            }
         }
 
         // Publishing is only necessary when using the CLI.

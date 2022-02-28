@@ -24,6 +24,8 @@ class DatabaseRecorder implements FlowRecorder
         $this->path = $params['path'] ?? 'flow';
         $this->middleware = $params['middleware'] ?? [];
         $this->events = collect();
+
+        $this->loadRoutes();
     }
 
     public function record(string $requestId, FlowPayload $payload, Carbon $start = null, float $durationMs = 0.0): void
@@ -68,7 +70,7 @@ class DatabaseRecorder implements FlowRecorder
         }
     }
 
-    public function loadRoutes()
+    protected function loadRoutes()
     {
         Route::group([
             'namespace' => 'EricPridham\Flow\Http\Controllers',

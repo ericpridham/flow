@@ -57,7 +57,6 @@ class Flow
                 $recorderInstance = $recorder;
             }
             $recorderInstance->init($initParams);
-            $recorderInstance->loadRoutes();
             $this->recorders->push($recorderInstance);
         });
     }

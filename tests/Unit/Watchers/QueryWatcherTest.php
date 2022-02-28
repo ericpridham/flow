@@ -71,10 +71,10 @@ class QueryWatcherTest extends FeatureTestCase
             ]
         ]);
 
-        event(new QueryExecuted('insert into "some_table" values ()', null, null, Mockery::spy()));
+        event(new QueryExecuted('insert into "some_table" values ()', null, 0.0, Mockery::spy()));
         $recorder->shouldNotHaveReceived('record');
 
-        event(new QueryExecuted('select * from "some_models"', null, null, Mockery::spy()));
+        event(new QueryExecuted('select * from "some_models"', null, 0.0, Mockery::spy()));
         $recorder->shouldNotHaveReceived('record');
     }
 }

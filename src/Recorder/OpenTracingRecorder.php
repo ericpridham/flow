@@ -59,8 +59,4 @@ class OpenTracingRecorder implements FlowRecorder
         //TODO not sure if $durationMs can be force, so here it's unused
         $scope->close();
     }
-
-    public function loadRoutes()
-    {
-    }
 }

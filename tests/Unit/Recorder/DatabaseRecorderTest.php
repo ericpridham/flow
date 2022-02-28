@@ -6,15 +6,13 @@ use Carbon\Carbon;
 use EricPridham\Flow\Payloads\GenericPayload;
 use EricPridham\Flow\Payloads\RequestPayload;
 use EricPridham\Flow\Recorder\DatabaseRecorder;
-use EricPridham\Flow\Tests\FeatureTestCase;
+use EricPridham\Flow\Tests\DatabaseTestCase;
 
-class DatabaseRecorderTest extends FeatureTestCase
+class DatabaseRecorderTest extends DatabaseTestCase
 {
     /** @test */
     public function it_can_store_a_generic_payload(): void
     {
-        $this->artisan('migrate', ['--database' => 'testbench']);
-
         $payload = new GenericPayload('id', ['data' => 'foo']);
 
         $recorder = new DatabaseRecorder();
@@ -35,8 +33,6 @@ class DatabaseRecorderTest extends FeatureTestCase
     /** @test */
     public function it_can_store_a_custom_payload(): void
     {
-        $this->artisan('migrate', ['--database' => 'testbench']);
-
         $payload = new RequestPayload('id', ['data' => 'foo']);
 
         $recorder = new DatabaseRecorder();
@@ -52,8 +48,6 @@ class DatabaseRecorderTest extends FeatureTestCase
     /** @test */
     public function it_can_store_at_a_specific_time(): void
     {
-        $this->artisan('migrate', ['--database' => 'testbench']);
-
         $payload = new RequestPayload('id', ['data' => 'foo']);
 
         $recorder = new DatabaseRecorder();
@@ -71,8 +65,6 @@ class DatabaseRecorderTest extends FeatureTestCase
     /** @test */
     public function it_retrieves_all_records_from_a_request(): void
     {
-        $this->artisan('migrate', ['--database' => 'testbench']);
-
         $payload = new RequestPayload('id', ['data' => 'foo']);
 
         $recorder = new DatabaseRecorder();
