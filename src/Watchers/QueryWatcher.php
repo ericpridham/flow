@@ -20,10 +20,13 @@ class QueryWatcher implements FlowWatcher
             $patterns = collect($params['filter'] ?? [])
                 ->push(FlowEvents::class) // never record FlowEvents queries
                 ->map(function ($param) {
-                    return '*"' . $this->getTableName($param) . '"*';
-                })->toArray();
-            if (Str::is($patterns, $event->sql)) {
-                return;
+                    return "\b" . $this->getTableName($param) . "\b";
+                });
+
+            foreach ($patterns as $pattern) {
+                if (Str::match("#" . $pattern . "#", $event->sql)) {
+                    return;
+                }
             }
 
             $durationMs = $event->time;
