@@ -40,23 +40,7 @@ class OpenTracingRecorder implements FlowRecorder
 
     public function record(string $requestId, FlowPayload $payload, Carbon $start = null, float $durationMs = 0.0): void
     {
-        $options = [];
-        if ($start) {
-            $options['start_time'] = $start->getPreciseTimestamp();
-        }
-
-        $scope = $this->tracer->startActiveSpan($payload->type, $options);
-        $span = $scope->getSpan();
-
-        foreach ($payload->data as $key => $value) {
-            if (is_array($value)) {
-                $span->setTag($key, print_r($value, true));
-            } else {
-                $span->setTag($key, $value);
-            }
-        }
-
         //TODO not sure if $durationMs can be force, so here it's unused
-        $scope->close();
+        $payload->addTraceData($this->tracer, $start);
     }
 }

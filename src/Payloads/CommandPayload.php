@@ -7,10 +7,10 @@ use Illuminate\Console\Events\CommandFinished;
 
 class CommandPayload extends FlowPayload
 {
-    public $type = 'command';
-    public $color = 'grey';
+    public string $type = 'command';
+    public string $color = 'grey';
 
-    public static function fromCommandFinished(CommandFinished $event)
+    public static function fromCommandFinished(CommandFinished $event): static
     {
         return new static(null, [
             'command' => $event->command,

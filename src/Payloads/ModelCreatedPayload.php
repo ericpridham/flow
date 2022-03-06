@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class ModelCreatedPayload extends FlowPayload
 {
-    public $type = 'model';
-    public $color = '#56bb8d';
+    public string $type = 'model';
+    public string $color = '#56bb8d';
 
-    public static function fromModel(Model $model): ModelCreatedPayload
+    public static function fromModel(Model $model): static
     {
         return new static(null, [
             'model_name' => get_class($model),
@@ -23,8 +23,17 @@ class ModelCreatedPayload extends FlowPayload
         return $this->data['model_name'] . ' Created';
     }
 
-    public function getDetails()
+    public function getDetails(): mixed
     {
         return $this->data['record'];
+    }
+
+    public function getTraceTags(): array
+    {
+        return [
+            'model.event' => 'created',
+            'model.name' => $this->data['model_name'],
+            'model.record' => $this->data['record'],
+        ];
     }
 }

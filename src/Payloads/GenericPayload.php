@@ -8,5 +8,5 @@ use EricPridham\Flow\Interfaces\FlowPayload;
 
 class GenericPayload extends FlowPayload
 {
-    public $type = 'generic';
+    public string $type = 'generic';
 }
