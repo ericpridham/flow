@@ -19,7 +19,12 @@ class OpenTracingRecorder implements FlowRecorder
     {
         $spanName = $params['root'] ?? 'laravel';
 
-        $this->tracer = $tracer = App::make(Tracer::class) ?? new NoopTracer();
+        try {
+            $tracer = App::make(Tracer::class);
+        } catch (\Throwable $exception) {
+            $tracer = new NoopTracer();
+        }
+        $this->tracer = $tracer;
 
         // extract the span context
         $spanContext = $this->tracer->extract(

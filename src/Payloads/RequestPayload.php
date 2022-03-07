@@ -44,7 +44,9 @@ class RequestPayload extends FlowPayload
     public function addTraceData(Tracer $tracer, ?Carbon $start): void
     {
         $span = $tracer->getActiveSpan();
-        $span->setTag('error', $this->data['error']);
+        if ($this->data['error']) {
+            $span->setTag('error', true);
+        }
         $span->setTag('http.url', $this->data['url']);
         $span->setTag('http.method', $this->data['method']);
         $span->setTag('http.status_code', $this->data['status_code']);
