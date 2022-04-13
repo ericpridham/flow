@@ -13,7 +13,8 @@
     "keywords": ["Laravel", "Flow"],
     "require": {
         "illuminate/support": "~8|~9",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ralouphie/getallheaders": "^3.0"
     },
     "suggest": {
         "opentracing/opentracing": "Required to use the OpenTracing recorder",
