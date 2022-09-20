@@ -26,10 +26,13 @@ class OpenTracingRecorder implements FlowRecorder
         }
         $this->tracer = $tracer;
 
+        // fallback to empty array if getallheaders() isn't available
+        $headers = function_exists('getallheaders') ? getallheaders() : [];
+
         // extract the span context
         $spanContext = $this->tracer->extract(
             Formats\TEXT_MAP,
-            getallheaders()
+            $headers
         );
 
         $scope = $this->tracer->startActiveSpan($spanName, [
