@@ -14,11 +14,16 @@ class RequestPayload extends FlowPayload
 
     public static function fromRequestHandled(RequestHandled $event): static
     {
+        // If the response exceeds the length of the TEXT field, it will get truncated. Respond with message instead of error.
+        // 65535 is the bytelength of TEXT columns, but we are saving some additional data around this so truncate if > 65000
+        $decodedResponse = (mb_strlen($event->response->getContent()) > 65000)
+            ? "Response Too Large"
+            : json_decode($event->response->getContent(), true);
         return new static(null, [
             'url' => $event->request->fullUrl(),
             'method' => $event->request->method(),
             'contents' => $event->request->all(),
-            'response' => json_decode($event->response->getContent(), /*$assoc=*/ true),
+            'response' => $decodedResponse,
             'status_code' => $event->response->getStatusCode(),
             'error' => !$event->response->isSuccessful()
         ]);
@@ -26,11 +31,13 @@ class RequestPayload extends FlowPayload
 
     public function getTitle(): string
     {
+        if (empty($this->data)) return "HTTP Request: Malformed JSON Response";
         return 'HTTP Request: ' . $this->data['method'] . ' ' . $this->data['url'];
     }
 
     public function getDetails(): mixed
     {
+        if (empty($this->data)) return [];
         $details = [
             'contents' => $this->data['contents'],
         ];
