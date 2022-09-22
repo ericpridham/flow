@@ -26,7 +26,9 @@ class QueryWatcherTest extends FeatureTestCase
         $bindings = ['foo', 'bar'];
         $connection->shouldReceive([
             'prepareBindings' => $bindings,
-            'getName' => 'foo'
+            'getName' => 'foo',
+            'getDriverName' => 'bar',
+            'getDatabaseName' => 'baz',
         ]);
         event(new QueryExecuted('sql', $bindings, 12345, $connection));
 
@@ -34,6 +36,7 @@ class QueryWatcherTest extends FeatureTestCase
             function (string $requestId, QueryPayload $payload) {
                 $this->assertEquals('sql', $payload->data['sql']);
                 $this->assertEquals(['foo', 'bar'], $payload->data['bindings']);
+                $this->assertEquals('baz', $payload->data['database']);
                 return true;
             }
         );
