@@ -57,5 +57,6 @@ class RequestPayload extends FlowPayload
         $span->setTag('http.url', $this->data['url']);
         $span->setTag('http.method', $this->data['method']);
         $span->setTag('http.status_code', $this->data['status_code']);
+        $span->setTag('server.hostname', gethostname());
     }
 }
