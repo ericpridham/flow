@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@ivanv/vue-collapse-transition": "^0.2.1",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "cross-env": "^7.0.2",
     "moment": "^2.27.0",
     "tailwindcss": "^1.4.6",
